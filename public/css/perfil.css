@@ -1,0 +1,242 @@
+/* Contenedor principal del perfil del usuario */
+.perfil-container-usuario {
+  position: relative;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* Imagen de portada */
+.imagen-header-perfil-usuario {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  height: 200px; /* Ajusta según el tamaño deseado */
+  border-radius: 10px;
+  border: 0 solid;
+  box-shadow: inset 0 0 20px rgba(0, 123, 255, 0);
+  outline: 1px solid;
+  outline-color: rgba(0, 123, 255, 0);
+  outline-offset: 0px;
+  transition: all 1250ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.imagen-header-perfil-usuario:hover {
+  box-shadow: inset 0 0 20px rgba(0, 123, 255, 0.5), 0 0 20px rgba(0, 123, 255, 0.2);
+  outline-offset: 15px;
+  outline-color: rgba(0, 123, 255, 0);
+}
+
+.imagen-portada-perfil {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Contenedor de imagen de perfil */
+.imagen-perfil-container {
+  position: relative;
+  text-align: center;
+}
+
+.imagen-perfil-usuario {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 3px solid white;
+  margin-top: -75px; /* Para superponer sobre la imagen de portada */
+  position: relative;
+  z-index: 1;
+}
+
+/* Botón de cámara */
+.imagen-perfil-cambiar {
+  position: absolute;
+  top: 100px; /* Ajusta según el tamaño de la imagen de perfil */
+  right: 10px;
+  z-index: 2;
+}
+
+.icono-camara {
+  background-color: #007BFF; /* Azul eléctrico */
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.icono-camara:hover {
+  background-color: #0056b3; /* Azul oscuro */
+}
+
+.btn-change-imagen {
+  display: block; /* Mostrar siempre el botón para la simplicidad */
+  background-color: #007BFF; /* Azul eléctrico */
+  border: none;
+  color: #fff;
+  border-radius: 20px;
+  padding: 5px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-change-imagen:hover {
+  background-color: #0056b3; /* Azul oscuro */
+}
+
+/* Botón de mensaje */
+.btn-message {
+  background-color: #007BFF; /* Azul eléctrico */
+  border: none;
+  color: #fff;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  text-decoration: none; /* Quitar la línea debajo del texto */
+  transition: all 1250ms cubic-bezier(0.19, 1, 0.22, 1);
+  position: relative;
+  overflow: hidden;
+  border: 0 solid;
+  outline: 1px solid;
+  outline-color: rgba(255, 255, 255, 0);
+  outline-offset: 0px;
+  text-shadow: none;
+}
+
+.btn-message:hover {
+  border: 1px solid;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.227), 0 0 20px rgba(255, 255, 255, 0.112);
+  outline-offset: 15px;
+  outline-color: rgba(255, 255, 255, 0);
+  text-shadow: 1px 1px 2px #090909;
+}
+
+/* Botón de editar */
+.btn-editar {
+  background-color: #007BFF; /* Verde */
+  border: none;
+  color: #fff;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px; /* Ajustar según sea necesario */
+}
+
+.btn-editar:hover {
+  background-color: #218838; /* Verde oscuro */
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .imagen-perfil-usuario {
+      width: 120px;
+      height: 120px;
+      margin-top: -60px;
+  }
+  .imagen-perfil-cambiar {
+      top: 85px;
+  }
+  .btn-message, .btn-editar {
+      width: 100%;
+      text-align: center;
+      padding: 8px 0;
+  }
+}
+
+/* Estilos para el área de publicaciones */
+.container-usuario-publicar {
+  background-color: #2B2B2B; /* Fondo gris oscuro */
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.container-usuario-publicar img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin-block-end: 10px;
+}
+
+.form-publicar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px; /* Añade espacio entre los elementos */
+}
+
+.published {
+  width: calc(100% - 80px); /* Ajuste del textarea para evitar que se pegue a la imagen */
+  background-color: #1E1E1E; /* Fondo negro */
+  border: 1px solid #444; /* Borde gris intermedio */
+  border-radius: 20px;
+  padding: 10px;
+  resize: none;
+}
+
+.published::placeholder {
+  color: #A9A9A9; /* Placeholder gris claro */
+}
+
+
+.image-upload-file {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+  justify-content: flex-end;
+}
+
+.upload-photo {
+  display: flex;
+  align-items: center;
+}
+
+.upload-photo img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.input-file {
+  position: relative;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.input-file input[type="file"] {
+  display: none; /* Ocultar el input por defecto */
+}
+
+.input-file label {
+  background-color: #007BFF; /* Azul eléctrico */
+  border: none;
+  color: #fff;
+  border-radius: 20px;
+  padding: 5px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.input-file label:hover {
+  background-color: #0056b3; /* Color de fondo cuando se pasa el mouse */
+}
+
+.btn-publi {
+  background-color: #007BFF; /* Azul eléctrico */
+  border: none;
+  color: #fff;
+  border-radius: 20px;
+  padding: 5px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: auto;
+}
+
+.btn-publi:hover {
+  background-color: #0056b3; /* Azul más oscuro al pasar el ratón */
+}

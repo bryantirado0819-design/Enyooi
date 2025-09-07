@@ -1,0 +1,12 @@
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /ENYOOI/public/
+
+    # Si el archivo o directorio no existe...
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Redirige todo a index.php pasando la URL como parámetro
+    RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]
+</IfModule>

@@ -1,0 +1,483 @@
+/* Estilos Generales */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #1E1E1E;
+  margin: 0;
+  padding-top: 75px; /* Espacio para la navbar fija */
+  color: #E0E0E0;
+}
+
+/* Evita el scroll del body cuando el menú móvil está abierto */
+body.navbar-open {
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* ========================================= */
+/* ESTILOS DE LA BARRA DE NAVEGACIÓN    */
+/* ========================================= */
+
+header.fixed-top {
+  background-color: #1E1E1E;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1030;
+}
+
+.navbar {
+  min-height: 75px;
+  padding: 0.5rem 1rem;
+}
+
+.navbar-brand .image-logo {
+  max-height: 50px;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #E0E0E0;
+  margin: 0 10px;
+  transition: color 0.3s ease;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+  color: #007BFF;
+}
+
+.navbar-dark .navbar-nav .nav-link i {
+  margin-right: 5px;
+}
+
+.navbar-toggler {
+  border: none;
+  outline: none; /* Quita el borde azul al hacer clic */
+}
+
+.navbar-toggler:focus {
+    box-shadow: none; /* Quita la sombra al enfocar */
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* --- Formulario de Búsqueda --- */
+.form-style {
+  background-color: #2B2B2B;
+  border: 1px solid #444;
+  color: #E0E0E0;
+  border-radius: 20px;
+  padding: 5px 15px;
+  transition: all 0.3s ease;
+}
+
+.form-style::placeholder {
+  color: #A9A9A9;
+}
+
+.form-style:focus {
+  background-color: #1E1E1E;
+  border-color: #007BFF;
+  outline: none;
+}
+
+.btn-form {
+  background-color: transparent;
+  border: none;
+  color: #E0E0E0;
+  padding-left: 10px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.btn-form:hover {
+  color: #007BFF;
+}
+
+/* --- Iconos y Dropdown de Usuario --- */
+.links a {
+  color: #E0E0E0;
+  margin: 0 15px;
+  font-size: 1.2rem; /* Aumenta un poco el tamaño de los íconos */
+  transition: color 0.3s ease;
+}
+
+.links a:hover {
+  color: #007BFF;
+}
+
+.dropdown .btn-radio {
+  color: #E0E0E0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  background-color: #2B2B2B;
+  border-radius: 10px;
+  border: 1px solid #444;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-item {
+  color: #E0E0E0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #007BFF;
+  color: #fff;
+}
+
+/* --- Notificaciones --- */
+.notificacion-container {
+  position: relative;
+  display: inline-block;
+}
+
+.bg-notificacion {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background-color: #FF0000;
+  color: #fff;
+  font-size: 12px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+
+/* ========================================= */
+/* ESTILOS RESPONSIVOS PARA NAVBAR      */
+/* ========================================= */
+
+@media (max-width: 991.98px) {
+    /* Contenedor principal del menú desplegado */
+    .navbar-collapse {
+        position: absolute;
+        top: 100%; /* Se posiciona justo debajo del header */
+        left: 0;
+        width: 100%;
+        background-color: #1E1E1E;
+        border-top: 1px solid #333;
+        padding: 20px;
+        max-height: calc(100vh - 75px); /* Altura máxima para evitar que sea más alto que la pantalla */
+        overflow-y: auto; /* Permite scroll si hay muchos elementos */
+    }
+
+    /* Apila los links de navegación verticalmente */
+    .navbar-nav {
+        align-items: flex-start;
+        width: 100%;
+    }
+    .navbar-nav .nav-item {
+        width: 100%;
+    }
+    .navbar-nav .nav-link {
+        padding: 12px 5px;
+        width: 100%;
+    }
+
+    /* Ajusta el formulario de búsqueda */
+    .form-inline {
+        margin: 20px 0;
+        width: 100%;
+    }
+    .form-inline .form-style {
+        flex-grow: 1; /* El input ocupa el espacio disponible */
+    }
+
+    /* Reorganiza la sección de usuario para la vista móvil */
+    .navbar-collapse .d-flex.align-items-center.ml-auto {
+        flex-direction: column; /* Apila los elementos verticalmente */
+        align-items: flex-start !important; /* Alinea todo a la izquierda */
+        width: 100%;
+        gap: 20px; /* Espacio entre los elementos */
+        border-top: 1px solid #333; /* Línea separadora */
+        padding-top: 20px;
+        margin-left: 0 !important; /* Resetea el margen automático */
+    }
+    
+    .navbar-collapse .links {
+        margin: 0 !important;
+    }
+
+    /* Ajusta el dropdown de perfil */
+    .navbar-collapse .dropdown {
+        width: 100%;
+    }
+    .navbar-collapse .dropdown-menu {
+        width: 100%;
+        position: static !important; /* Importante para que se muestre en el flujo */
+        float: none !important;
+        background-color: #2a3342;
+        border: none;
+        box-shadow: none;
+    }
+}
+
+/* ========================================= */
+/* OTROS ESTILOS DE TU PÁGINA         */
+/* ========================================= */
+
+/* (Aquí continúan todos tus otros estilos que no son del navbar: 
+   perfil-usuario-main, like-btn, textarea, etc.) */
+
+/* Columna de Perfil */
+.perfil-usuario-main {
+  background-color: #2B2B2B;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-family: 'Roboto', sans-serif;
+}
+
+.background-usuario-main {
+  background-color: #007BFF;
+  height: 100px;
+  border-radius: 10px 10px 0 0;
+}
+
+.perfil-usuario-main img {
+  border-radius: 50%;
+  border: 4px solid #2B2B2B;
+  width: 100px;
+  height: 100px;
+  margin-top: -50px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ... (pega aquí el resto de tus estilos originales) ... */
+
+.foto-separation {
+  margin-bottom: 15px;
+}
+
+.nombre-perfil {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.tabla-estadisticas a {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  border-top: 1px solid #444; /* Borde gris */
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.tabla-estadisticas a:hover {
+  background-color: #007BFF; /* Azul eléctrico */
+}
+
+/* Columna Principal (Publicaciones) */
+.container-usuario-publicar {
+  background-color: #2B2B2B; /* Fondo gris oscuro */
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.container-usuario-publicar img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.form-publicar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.published {
+  width: 100%;
+  background-color: #1E1E1E; /* Fondo negro */
+  border: 1px solid #444; /* Borde gris intermedio */
+  border-radius: 20px;
+  padding: 10px;
+  resize: none;
+}
+
+.published::placeholder {
+  color: #A9A9A9; /* Placeholder gris claro */
+}
+
+.image-upload-file {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+  justify-content: flex-end;
+}
+
+.upload-photo {
+  display: flex;
+  align-items: center;
+}
+
+.upload-photo img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.input-file {
+  position: relative;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.input-file input[type="file"] {
+  display: none; /* Ocultar el input por defecto */
+}
+
+.input-file label {
+  background-color: #007BFF; /* Azul eléctrico */
+  border: none;
+  color: #fff;
+  border-radius: 20px;
+  padding: 5px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+
+
+.input-file label:hover {
+  background-color: #0056b3; /* Color de fondo cuando se pasa el mouse */
+}
+
+.btn-publi {
+  background-color: #007BFF; /* Azul eléctrico */
+  border: none;
+  color: #fff;
+  border-radius: 20px;
+  padding: 5px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: auto;
+}
+
+.btn-publi:hover {
+  background-color: #0056b3; /* Azul más oscuro al pasar el ratón */
+}
+
+/* Contenedor de Publicaciones de Usuarios */
+.container-usuarios-publicaciones {
+  background-color: #2B2B2B; /* Fondo gris oscuro */
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.head-publicaciones {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.head-publicaciones img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin-right: 15px;
+}
+
+.name-publicaciones {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.fecha-publicaciones {
+  color: #A9A9A9; /* Fecha en gris claro */
+  font-size: 0.9em;
+  margin-top: -5px; /* Ajuste fino para la alineación */
+}
+
+.contenido-publicaciones {
+  font-size: 1em;
+  color: #E0E0E0; /* Texto blanco humo */
+}
+
+.contenido-publicaciones img {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+/* Navbar Responsiva */
+body.navbar-open {
+  overflow: hidden; /* Evita que el contenido se desplace cuando el menú está abierto */
+}
+
+.navbar-collapse.collapse.show {
+  background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro semitransparente */
+  position: fixed;
+  top: 75px; /* Ajusta según la altura de tu navbar */
+  right: 0;
+  left: 0;
+  z-index: 1029;
+  transform: scaleY(1);
+  transition: transform 0.3s ease;
+}
+
+.navbar-nav {
+  flex-direction: column;
+  background-color: #1E1E1E; /* Fondo del menú desplegable */
+  margin-top: 20px; /* Añade margen superior para separar del contenido */
+}
+
+.navbar-nav .nav-link {
+  padding: 10px 15px;
+}
+
+.navbar-collapse {
+  transition: transform 0.3s ease;
+}
+
+.navbar-collapse.collapsing {
+  transform: scaleY(0);
+}
+
+@media (max-width: 768px) {
+  .navbar-collapse {
+    position: absolute;
+    width: 100%;
+    background-color: #1E1E1E; /* Fondo para el menú en dispositivos móviles */
+    top: 75px; /* Ajusta según la altura de tu navbar */
+    right: 0;
+    left: 0;
+    z-index: 1030;
+  }
+
+  .navbar-toggler {
+    margin-left: auto;
+  }
+
+  .navbar-toggler-icon {
+    filter: brightness(0) invert(1); /* Asegura que el icono se vea claro en fondos oscuros */
+  }
+
+  .dropdown-menu {
+    width: 100%;
+    border-radius: 0; /* Sin esquinas redondeadas en móviles */
+  }
+}

@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    container_name: enyooi_web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html:cached
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASS=example
+      - DB_NAME=enyooi
+      - ENYOOI_SIGN_SECRET=change_me_in_prod
+      - ENYOOI_COMMISSION=20
+      - DF_MERCHANT_ID=your_df_merchant_id
+      - DF_ACCOUNT=your_df_account
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:10.6
+    container_name: enyooi_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: enyooi
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./migrations:/docker-entrypoint-initdb.d:ro
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: example
+    depends_on:
+      - db
+
+volumes:
+  db_data:

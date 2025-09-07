@@ -1,0 +1,270 @@
+/* Contenedor de la publicación */
+.container-usuarios-publicaciones {
+  background-color: #2b2b2b; /* Fondo oscuro */
+  border-radius: 8px;
+  position: relative;
+  padding: 15px;
+  margin-bottom: 20px;
+  max-width: 600px; /* Ancho máximo para las publicaciones */
+  color: #e2e3e3; /* Texto claro */
+}
+/* LOADER*/
+.loader {
+  border: 16px solid #f3f3f3; /* Gris claro */
+  border-radius: 50%;
+  border-top: 16px solid #3498db; /* Azul */
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none; /* Oculto por defecto */
+}
+
+/* Animación del loader */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Parte superior de la publicación */
+.usuarios-publicaciones-top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.image-border {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.informacion-usuario-publico h6 {
+  font-size: 1em;
+  font-weight: bold;
+  margin-bottom: 2px;
+  color: #e2e3e3; /* Texto claro */
+}
+
+.informacion-usuario-publico span {
+  color: #a0a0a0; /* Gris claro para la fecha */
+  font-size: 0.8em;
+}
+
+/* Contenido de la publicación */
+.contenido-publicacion-usuario {
+  font-size: 0.95em;
+  margin-bottom: 10px;
+  color: #e2e3e3; /* Texto claro */
+}
+
+.imagen-publicacion-usuario,
+.video-publicacion-usuario {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+/* Sección de acciones (Me gusta, comentar) */
+.acciones-usuario-publicar {
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #444; /* Línea superior */
+  padding-top: 5px;
+}
+
+.acciones-usuario-publicar button {
+  background-color: transparent;
+  border: none;
+  color: #a0a0a0;
+  cursor: pointer;
+  padding: 10px;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.acciones-usuario-publicar button:hover {
+  background-color: #3a3b3c;
+  border-radius: 5px;
+}
+
+.acciones-usuario-publicar i {
+  margin-right: 5px;
+}
+
+.like-btn.like-active {
+  color: #ff0000;
+}
+
+.like-btn.like-active i {
+  color: #ff0000;
+}
+
+/* Estilo del botón de comentarios */
+.btn-comentarios-toggle {
+  color: #a0a0a0;
+}
+
+/* Estilo de comentarios */
+.comentarios-container {
+  margin-top: 10px;
+}
+
+.formulario-comentarios-contenedor {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.form-comentario-usuario {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: none;
+  background-color: #3a3b3c;
+  margin-left: 10px;
+  font-size: 0.9em;
+  color: #e2e3e3;
+}
+
+.form-comentario-usuario::placeholder {
+  color: #a0a0a0;
+}
+
+.btn-comentario-container button {
+  display: none; /* El botón se oculta para una experiencia más fluida */
+}
+
+/* Comentarios existentes */
+.container-contenido-comentarios {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 10px;
+}
+
+.container-contenido-comentarios .image-border {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+}
+
+.contenido-comentario-usuario {
+  background-color: #3a3b3c;
+  border-radius: 12px;
+  padding: 10px 15px;
+  font-size: 0.85em;
+  color: #e2e3e3;
+  position: relative;
+  max-width: 80%;
+}
+
+.contenido-comentario-usuario a.big {
+  font-weight: bold;
+  color: #2d88ff;
+  text-decoration: none;
+}
+
+.contenido-comentario-usuario span {
+  display: block;
+  color: #a0a0a0;
+  font-size: 0.75em;
+  margin-top: 2px;
+}
+
+.contenido-comentario-usuario .icono-eliminar {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  color: #a0a0a0;
+  cursor: pointer;
+}
+
+.contenido-comentario-usuario .icono-eliminar:hover {
+  color: #ff0000;
+}
+
+/* Estilos para aplicar blur cuando el modal está abierto */
+.blur {
+  filter: blur(10px); /* Aplica el efecto de desenfoque */
+}
+
+/* Estilos del modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999; /* Por encima de todos los elementos, incluyendo la navbar */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  max-width: 90%;
+  max-height: 80%;
+  object-fit: contain; /* Mantiene la proporción de la imagen */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.caption {
+  margin-top: 10px;
+  text-align: center;
+  color: #e2e3e3; /* Texto claro */
+  font-size: 1.1em;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 30px;
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close:hover,
+.close:focus {
+  color: #0044ff; /* Cambiar a rojo al pasar el cursor */
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    max-width: 100%;
+    max-height: 70%;
+  }
+  
+  .close {
+    font-size: 30px; /* Ajuste para móviles */
+  }
+}
+
+
+
+/* Adaptaciones para dispositivos móviles */
+@media (max-width: 768px) {
+  .container-usuarios-publicaciones {
+    margin: 10px;
+  }
+}

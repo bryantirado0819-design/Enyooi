@@ -1,0 +1,12 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Ruta base (ajústala si tu proyecto está en subcarpeta)
+    RewriteBase /ENYOOI/
+
+    # Evita bucle si ya está en public
+    RewriteCond %{REQUEST_URI} !^/ENYOOI/public/
+
+    # Redirige todo a public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
