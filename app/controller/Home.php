@@ -194,7 +194,7 @@ class Home extends Controller
             $metodo = 'transferencia';
         }
 
-        $uploadDir = rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/ENYOOI/public/uploads/';
+        $uploadDir = rtrim($_SERVER['DOCUMENT_ROOT'], '/') . 'public/uploads/';
         if (!is_dir($uploadDir)) @mkdir($uploadDir, 0755, true);
 
         $save_upload = function ($field, $prefix) use ($uploadDir, $uid) {
@@ -210,7 +210,7 @@ class Home extends Controller
             if ($ext === '') return '';
             $name = $prefix . '_' . $uid . '_' . time() . '.' . $ext;
             $dest = $uploadDir . $name;
-            return move_uploaded_file($_FILES[$field]['tmp_name'], $dest) ? '/ENYOOI/public/uploads/' . $name : '';
+            return move_uploaded_file($_FILES[$field]['tmp_name'], $dest) ? 'public/uploads/' . $name : '';
         };
 
         $foto   = $save_upload('foto', 'foto');
@@ -279,6 +279,7 @@ class Home extends Controller
                 if ($this->usuarioModel->verificarContrasena($datosUsuario, $datosLogin['contrasena'])) {
                     $_SESSION['logueando'] = $datosUsuario->idUsuario;
                     $_SESSION['usuario']   = $datosUsuario->usuario;
+                    $_SESSION['rol']       = $datosUsuario->rol;
 
                     error_log("Login successful for user: " . $_SESSION['usuario']);
                     header('Location: /ENYOOI/home');
@@ -357,7 +358,7 @@ class Home extends Controller
 
         $rutaDocumento = null;
         if ($pais !== "Ecuador" && !empty($documento['name'])) {
-            $carpeta = rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/ENYOOI/public/img/documentos/';
+            $carpeta = rtrim($_SERVER['DOCUMENT_ROOT'], '/') . 'public/img/documentos/';
             if (!is_dir($carpeta) && !mkdir($carpeta, 0777, true)) {
                 $_SESSION['usuarioError'] = "Error en el servidor al subir el documento.";
                 $this->view('pages/register'); return;

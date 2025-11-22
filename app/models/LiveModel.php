@@ -1,7 +1,4 @@
 <?php
-// Modelo Live completo
-require_once __DIR__ . '/../libs/Base.php';
-
 class LiveModel
 {
     private $db;
@@ -11,160 +8,142 @@ class LiveModel
         $this->db = new Base;
     }
 
-    public function createLive($d)
+    public function getStreamDataByCreatorId($creatorId)
     {
-        $this->db->query("INSERT INTO live_streams (idUsuario, title, mode, rtmp_key, vertical, status)
-                          VALUES (:u, :t, :m, :k, :v, 'active')");
-        $this->db->bind(':u', $d['idUsuario']);
-        $this->db->bind(':t', $d['title']);
-        $this->db->bind(':m', $d['mode']);
-        $this->db->bind(':k', $d['rtmp_key']);
-        $this->db->bind(':v', $d['vertical']);
-        $this->db->execute();
-
-        // Obtener el último ID
-        $this->db->query("SELECT LAST_INSERT_ID() as id");
-        $row = $this->db->single();
-        return (int)$row->id;
-    }
-
-    public function endLive($liveId, $idUsuario)
-    {
-        $this->db->query("UPDATE live_streams SET status='ended', ended_at=NOW()
-                          WHERE id=:id AND idUsuario=:u");
-        $this->db->bind(':id', $liveId);
-        $this->db->bind(':u', $idUsuario);
-        return $this->db->execute();
-    }
-
-    public function getLive($liveId)
-    {
-        $this->db->query("SELECT * FROM live_streams WHERE id=:id");
-        $this->db->bind(':id', $liveId);
+        // CORREGIDO: La tabla `streams` usa `creator_id`
+        $this->db->query("SELECT * FROM streams WHERE creator_id = :id");
+        $this->db->bind(':id', $creatorId);
         return $this->db->single();
     }
 
-    public function saveChatMessage($liveId, $idUsuario, $message)
+    public function createOrUpdateStreamKey($creatorId)
     {
-        $this->db->query("INSERT INTO live_chat_messages (live_id, idUsuario, message)
-                          VALUES (:l,:u,:m)");
-        $this->db->bind(':l', $liveId);
-        $this->db->bind(':u', $idUsuario);
-        $this->db->bind(':m', $message);
-        return $this->db->execute();
-    }
-
-    public function addLike($liveId, $idUsuario)
-    {
-        $this->db->query("INSERT INTO live_likes (live_id, idUsuario) VALUES (:l,:u)");
-        $this->db->bind(':l', $liveId);
-        $this->db->bind(':u', $idUsuario);
-        return $this->db->execute();
-    }
-
-    public function processDonation($liveId, $idUsuario, $amount)
-    {
-        // Ver saldo
-        $this->db->query("SELECT balance FROM zafiro_wallet WHERE idUsuario=:u");
-        $this->db->bind(':u', $idUsuario);
-        $w = $this->db->single();
-        if (!$w || (int)$w->balance < $amount) {
-            return ['success' => false, 'message' => 'Saldo ZAFIRO insuficiente'];
+        // CORREGIDO: La tabla `streams` usa `creator_id`
+        $this->db->query("SELECT idstream FROM streams WHERE creator_id = :id");
+        $this->db->bind(':id', $creatorId);
+        if (!$this->db->single()) {
+            $streamKey = bin2hex(random_bytes(16));
+            // CORREGIDO: La tabla `streams` usa `creator_id`
+            $this->db->query("INSERT INTO streams (creator_id, stream_key) VALUES (:id, :key)");
+            $this->db->bind(':id', $creatorId);
+            $this->db->bind(':key', $streamKey);
+            return $this->db->execute();
         }
-
-        // Descontar saldo y registrar
-        $this->db->query("UPDATE zafiro_wallet SET balance = balance - :a WHERE idUsuario=:u");
-        $this->db->bind(':a', $amount);
-        $this->db->bind(':u', $idUsuario);
-        $this->db->execute();
-
-        $this->db->query("INSERT INTO zafiro_tx (idUsuario, type, amount, ref_type, ref_id)
-                          VALUES (:u, 'spend', :a, 'live', :l)");
-        $this->db->bind(':u', $idUsuario);
-        $this->db->bind(':a', $amount);
-        $this->db->bind(':l', $liveId);
-        $this->db->execute();
-
-        $this->db->query("INSERT INTO live_donations (live_id, idUsuario, amount_zafiro)
-                          VALUES (:l,:u,:a)");
-        $this->db->bind(':l', $liveId);
-        $this->db->bind(':u', $idUsuario);
-        $this->db->bind(':a', $amount);
-        $this->db->execute();
-
-        return ['success' => true, 'message' => '¡Gracias por donar!'];
-    }
-
-    public function saveLovenseRules($liveId, array $rules)
-    {
-        // rules: [{min_zafiro, max_zafiro, intensity, duration_ms}, ...]
-        foreach ($rules as $r) {
-            $this->db->query("INSERT INTO live_lovense_rules
-               (live_id, min_zafiro, max_zafiro, intensity, duration_ms)
-               VALUES (:l,:minz,:maxz,:i,:d)");
-            $this->db->bind(':l', $liveId);
-            $this->db->bind(':minz', (int)$r['min_zafiro']);
-            $this->db->bind(':maxz', (int)$r['max_zafiro']);
-            $this->db->bind(':i', (int)$r['intensity']);
-            $this->db->bind(':d', (int)$r['duration_ms']);
-            $this->db->execute();
-        }
-    }
-
-    public function saveLovenseToken($idUsuario, $token, $apiBase)
-    {
-        $this->db->query("REPLACE INTO user_lovense (idUsuario, access_token, api_base)
-                          VALUES (:u,:t,:a)");
-        $this->db->bind(':u', $idUsuario);
-        $this->db->bind(':t', $token);
-        $this->db->bind(':a', $apiBase);
-        return $this->db->execute();
-    }
-
-    public function triggerLovense($liveId, $amount)
-    {
-        // Buscar reglas aplicables
-        $this->db->query("SELECT intensity, duration_ms
-                          FROM live_lovense_rules
-                          WHERE live_id=:l AND :amt BETWEEN min_zafiro AND max_zafiro
-                          ORDER BY min_zafiro DESC LIMIT 1");
-        $this->db->bind(':l', $liveId);
-        $this->db->bind(':amt', $amount);
-        $rule = $this->db->single();
-        if (!$rule) return false;
-
-        // Obtener el creador
-        $this->db->query("SELECT idUsuario FROM live_streams WHERE id=:l");
-        $this->db->bind(':l', $liveId);
-        $row = $this->db->single();
-        if (!$row) return false;
-
-        // Token Lovense
-        $this->db->query("SELECT access_token, api_base FROM user_lovense WHERE idUsuario=:u");
-        $this->db->bind(':u', $row->idUsuario);
-        $lv = $this->db->single();
-        if (!$lv) return false;
-
-        // Llamada HTTP a Lovense (simple cURL)
-        $payload = [
-            'command'  => 'Vibrate',
-            'strength' => (int)$rule->intensity,
-            'time'     => (int)$rule->duration_ms
-        ];
-        $url = rtrim($lv->api_base, '/') . '/api/command?token=' . urlencode($lv->access_token);
-
-        $ch = curl_init($url);
-        curl_setopt_array($ch, [
-            CURLOPT_POST => true,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
-            CURLOPT_POSTFIELDS => json_encode($payload)
-        ]);
-        $res = curl_exec($ch);
-        curl_close($ch);
-
         return true;
     }
-}
+    
+    // --- MÉTODOS COMPLETOS PARA MONETIZACIÓN (CORREGIDOS) ---
 
-?>
+    public function getTipOptions($creatorId) {
+        // CORREGIDO: La tabla `stream_tip_options` usa `creator_id`
+        $this->db->query("SELECT * FROM stream_tip_options WHERE creator_id = :id AND is_active = 1");
+        $this->db->bind(':id', $creatorId);
+        return $this->db->registers();
+    }
+
+    public function getRouletteOptions($creatorId) {
+        // CORREGIDO: La tabla `stream_roulette_options` usa `creator_id`
+        $this->db->query("SELECT * FROM stream_roulette_options WHERE creator_id = :id AND is_enabled = 1");
+        $this->db->bind(':id', $creatorId);
+        return $this->db->registers();
+    }
+    
+    public function getLovenseTipOptions($creatorId) {
+        // CORREGIDO: La tabla `lovense_tip_options` usa `creator_id`
+        $this->db->query("SELECT * FROM lovense_tip_options WHERE creator_id = :id AND is_active = 1");
+        $this->db->bind(':id', $creatorId);
+        return $this->db->registers();
+    }
+    
+    public function addTipOption($creatorId, $zafiros, $descripcion) {
+        // CORREGIDO: La tabla `stream_tip_options` usa `creator_id`
+        $this->db->query("INSERT INTO stream_tip_options (creator_id, zafiros, descripcion) VALUES (:id, :z, :d)");
+        $this->db->bind(':id', $creatorId);
+        $this->db->bind(':z', $zafiros);
+        $this->db->bind(':d', $descripcion);
+        return $this->db->execute() ? $this->db->lastInsertId() : false;
+    }
+
+    public function deleteTipOption($optionId, $creatorId) {
+        // CORREGIDO: La tabla `stream_tip_options` usa `creator_id`
+        $this->db->query("DELETE FROM stream_tip_options WHERE id = :id AND creator_id = :cid");
+        $this->db->bind(':id', $optionId);
+        $this->db->bind(':cid', $creatorId);
+        return $this->db->execute();
+    }
+
+    public function addRouletteOption($creatorId, $texto) {
+        // CORREGIDO: La tabla `stream_roulette_options` usa `creator_id`
+        $this->db->query("INSERT INTO stream_roulette_options (creator_id, option_text) VALUES (:id, :txt)");
+        $this->db->bind(':id', $creatorId);
+        $this->db->bind(':txt', $texto);
+        return $this->db->execute() ? $this->db->lastInsertId() : false;
+    }
+
+    public function deleteRouletteOption($optionId, $creatorId) {
+        // CORREGIDO: La tabla `stream_roulette_options` usa `creator_id`
+        $this->db->query("DELETE FROM stream_roulette_options WHERE id = :id AND creator_id = :cid");
+        $this->db->bind(':id', $optionId);
+        $this->db->bind(':cid', $creatorId);
+        return $this->db->execute();
+    }
+    
+    public function addLovenseTipOption($creatorId, $zafiros, $duration, $intensity) {
+        // CORREGIDO: La tabla `lovense_tip_options` usa `creator_id`.
+        $this->db->query("INSERT INTO lovense_tip_options (creator_id, zafiros, duration_seconds, intensity_level) VALUES (:id, :z, :d, :i)");
+        $this->db->bind(':id', $creatorId);
+        $this->db->bind(':z', $zafiros);
+        $this->db->bind(':d', $duration);
+        $this->db->bind(':i', $intensity);
+        return $this->db->execute() ? $this->db->lastInsertId() : false;
+    }
+
+    public function deleteLovenseTipOption($optionId, $creatorId) {
+        // CORREGIDO: La tabla `lovense_tip_options` usa `creator_id`.
+        $this->db->query("DELETE FROM lovense_tip_options WHERE id = :id AND creator_id = :cid");
+        $this->db->bind(':id', $optionId);
+        $this->db->bind(':cid', $creatorId);
+        return $this->db->execute();
+    }
+    
+    public function updateStreamSettings($creatorId, $data) {
+        // CORREGIDO: La tabla `streams` usa `creator_id`
+        $this->db->query("UPDATE streams SET titulo = :title, descripcion = :desc, roulette_enabled = :r_enabled, roulette_cost = :r_cost WHERE creator_id = :id");
+        $this->db->bind(':title', $data['titulo'] ?? 'En vivo');
+        $this->db->bind(':desc', $data['descripcion'] ?? '');
+        $this->db->bind(':r_enabled', $data['roulette_enabled'] ? 1 : 0);
+        $this->db->bind(':r_cost', $data['roulette_cost'] ?? 50);
+        $this->db->bind(':id', $creatorId);
+        return $this->db->execute();
+    }
+
+    public function getActiveStreams()
+    {
+        // ✅ CORRECCIÓN: Eliminada la subconsulta de tags
+        $sql = "
+            SELECT
+                s.idstream AS stream_id,
+                s.titulo AS stream_title,
+                s.thumbnail_url,
+                u.nickname AS creator_nickname,
+                p.foto_perfil AS creator_avatar 
+                -- Eliminada la subconsulta de tags ya que la tabla stream_tag_relations no existe
+            FROM
+                streams s
+            JOIN
+                usuarios u ON s.creator_id = u.idUsuario
+            LEFT JOIN
+                perfil p ON s.creator_id = p.idusuario
+            WHERE
+                s.estado = 'live'
+            ORDER BY
+                s.created_at DESC
+        ";
+
+        $this->db->query($sql);
+        $results = $this->db->registers(); // registers() devuelve un array o false
+
+        // ✅ CORRECCIÓN: Asegurarse de devolver siempre un array
+        return $results ?: []; // Si registers() devuelve false, devolvemos un array vacío
+    }
+} 

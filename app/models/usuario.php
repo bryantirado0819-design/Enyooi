@@ -550,7 +550,34 @@ public function guardarOnboardingEspectador($uid, $nickname)
         return $result->total;}
 
         
+// ✅ CORRECCIÓN DEFINITIVA APLICADA AQUÍ
+    // La columna en la tabla `perfil` es `idusuario`, no `id_usuario`.
+    public function getUserLevelInfo($userId) {
+        $this->db->query("SELECT level, xp FROM perfil WHERE idusuario = :id");
+        $this->db->bind(':id', $userId);
+        $profile = $this->db->register();
 
+        $currentLevel = $profile->level ?? 1;
+        $currentXp = $profile->xp ?? 0;
+        
+        $xpForNextLevel = $currentLevel * 100 * ($currentLevel * 0.5);
+        $rewardForNextLevel = $currentLevel * 50; 
+        
+        $xpForCurrentLevel = ($currentLevel > 1) ? (($currentLevel - 1) * 100 * (($currentLevel - 1) * 0.5)) : 0;
+        $xpInCurrentLevel = $currentXp - $xpForCurrentLevel;
+        $xpNeededForLevelUp = $xpForNextLevel - $xpForCurrentLevel;
+        
+        $progressPercentage = ($xpNeededForLevelUp > 0) ? round(($xpInCurrentLevel / $xpNeededForLevelUp) * 100) : 0;
+        $progressPercentage = max(0, min(100, $progressPercentage));
+
+        return [
+            'current_level' => $currentLevel,
+            'current_xp' => (int)$currentXp,
+            'xp_needed_for_next' => (int)$xpForNextLevel,
+            'progress_percentage' => $progressPercentage,
+            'next_level_reward' => (int)$rewardForNextLevel
+        ];
+    }
 
 
 }

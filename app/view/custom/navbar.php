@@ -5,13 +5,13 @@ if ($isLoggedIn) {
     $user = $datos['navbar_usuario_obj'];
     $profile = $datos['navbar_perfil_obj'];
     
-    // Esta variable ya no se usará directamente, el JS la cargará de forma dinámica.
-    // $notification_count = $datos['navbar_notificaciones']; 
-    
-    // ✅ SOLUCIÓN AL ERROR FATAL 'private property': Creamos una instancia del modelo aquí
+    // Suponemos que tienes un modelo de usuario para obtener estos datos
     $tempUserModel = new Usuario();
     $message_count = $tempUserModel->getMensajesNoLeidos($_SESSION['logueando']);
     $zafiros_balance = $datos['navbar_zafiros'];
+
+    // Obtenemos el rol del usuario para usarlo en la lógica de la barra de navegación
+    $user_rol = $user->rol ?? 'usuario';
 }
 ?>
 
@@ -49,11 +49,19 @@ if ($isLoggedIn) {
                     <div class="flex items-baseline space-x-4">
                         <a href="<?php echo URL_PROJECT; ?>home" class="flex items-center gap-2 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"><i class="fas fa-home w-4"></i><span>Inicio</span></a>
                         <a href="<?php echo URL_PROJECT; ?>usuarios" class="flex items-center gap-2 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"><i class="fas fa-users w-4"></i><span>Explorar</span></a>
-                        <a href="<?php echo URL_PROJECT; ?>live" class="flex items-center gap-2 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"><i class="fas fa-video w-4"></i><span>Live</span></a>
+                        <a href="<?php echo URL_PROJECT; ?>live" class="flex items-center gap-2 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"><i class="fas fa-video w-4 text-red-500"></i><span>Live</span></a>
+                        
+                        <?php if ($isLoggedIn && $user_rol === 'creadora'): ?>
+                            <a href="<?php echo URL_PROJECT; ?>live/stream" class="flex items-center gap-2 text-white bg-pink-600/80 hover:bg-pink-700/80 px-4 py-2 rounded-full text-sm font-bold transition-colors shadow-lg">
+                                <i class="fas fa-broadcast-tower"></i>
+                                <span>Hacer Live</span>
+                            </a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
 
+            <!-- BOTÓN DEL MENÚ MÓVIL (HAMBURGUESA) -->
             <div class="md:hidden">
                 <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-slate-700/50 focus:outline-none">
                     <i id="mobile-menu-icon" class="fas fa-bars text-xl"></i>
@@ -62,6 +70,7 @@ if ($isLoggedIn) {
 
             <?php if ($isLoggedIn): ?>
             <div class="hidden md:flex items-center gap-5">
+                <!-- Búsqueda -->
                 <div class="relative">
                     <input type="text" id="searchInput" autocomplete="off" class="bg-slate-800/80 border border-slate-700 text-white text-sm rounded-full w-48 px-4 py-2 pr-10 focus:ring-2 focus:ring-pink-500 focus:outline-none transition-all duration-300 focus:w-64" placeholder="Buscar...">
                     <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
@@ -70,6 +79,7 @@ if ($isLoggedIn) {
                     <div id="searchResults" class="search-results custom-scrollbar absolute left-0 mt-2 w-full origin-top-right rounded-xl shadow-lg max-h-80 overflow-y-auto" style="background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px);"></div>
                 </div>
 
+                <!-- Mensajes -->
                 <a href="<?php echo URL_PROJECT; ?>mensajes" title="Mensajes" class="relative text-gray-300 hover:text-white text-xl transition-colors">
                     <i class="far fa-envelope"></i>
                     <?php if ($message_count > 0): ?>
@@ -77,43 +87,51 @@ if ($isLoggedIn) {
                     <?php endif; ?>
                 </a>
                 
-                <div class="relative" id="notification-bell">
-                    <button class="text-gray-300 hover:text-white text-xl transition-colors">
+                <!-- Notificaciones -->
+                <div class="relative">
+                    <button id="notification-bell-button" class="text-gray-300 hover:text-white text-xl transition-colors">
                         <i class="far fa-bell"></i>
                     </button>
-                    <span id="notification-count" class="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center hidden"></span>
+                    <span id="notification-count-badge" class="absolute -top-1 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white hidden"></span>
                     
-                    <div id="notification-dropdown" class="dropdown-panel absolute right-0 mt-4 w-80 md:w-96 origin-top-right rounded-xl shadow-lg" style="background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px);">
-                        <div class="p-3 font-semibold text-white border-b border-slate-700">Notificaciones</div>
-                        <div id="notification-list" class="custom-scrollbar max-h-96 overflow-y-auto">
-                            </div>
-                        <a href="<?php echo URL_PROJECT; ?>notificacion/verTodas" class="block text-center p-2 text-sm text-blue-400 hover:bg-slate-700/50 rounded-b-xl">Ver todas</a>
+                    <div id="notification-dropdown-panel" class="dropdown-panel absolute right-0 mt-4 w-80 md:w-96 origin-top-right rounded-xl shadow-lg" style="background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px);">
+                        <div class="p-3 font-semibold text-white border-b border-slate-700/50 flex justify-between items-center">
+                            <span>Notificaciones</span>
+                        </div>
+                        <div id="notification-list-container" class="custom-scrollbar max-h-96 overflow-y-auto">
+                            <!-- JS inserta las notificaciones aquí -->
+                        </div>
+                        <a href="<?php echo URL_PROJECT; ?>notificacion/verTodas" class="block text-center p-2 text-sm text-blue-400 hover:bg-slate-700/50 rounded-b-xl transition-colors">Ver todas</a>
                     </div>
                 </div>
 
-
-                <a href="<?php echo URL_PROJECT; ?>recargar" class="px-3 py-1.5 rounded-full text-sm font-bold text-white transition-transform hover:scale-105" style="background: linear-gradient(to right, var(--accent), var(--accent-2));">
+                <!-- Zafiros -->
+                <a href="<?php echo URL_PROJECT; ?>/wallet" class="px-3 py-1.5 rounded-full text-sm font-bold text-white transition-transform hover:scale-105" style="background: linear-gradient(to right, var(--accent), var(--accent-2));">
                     💎 <?php echo number_format($zafiros_balance); ?>
                 </a>
 
+                <!-- Menú de Usuario -->
                 <div class="relative">
                     <button id="user-menu-button" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-800 focus:ring-white">
                         <img class="h-9 w-9 rounded-full object-cover" src="<?php echo URL_PROJECT . htmlspecialchars($profile->foto_perfil); ?>" alt="Avatar">
                     </button>
-                    <div id="user-menu-panel" class="dropdown-panel absolute right-0 mt-4 w-56 origin-top-right rounded-xl py-1 shadow-lg" style="background: rgba(30, 41, 59, 0.95);">
+                    <div id="user-menu-panel" class="dropdown-panel absolute right-0 mt-4 w-64 origin-top-right rounded-xl py-1 shadow-lg" style="background: rgba(30, 41, 59, 0.95);">
+                         <!-- Contenido del menú de usuario (sin cambios) -->
                         <div class="px-4 py-3 border-b border-slate-700">
                             <p class="text-sm text-white font-semibold">Hola, <?php echo htmlspecialchars(ucwords($user->usuario)); ?></p>
                             <p class="text-xs text-gray-400 truncate"><?php echo htmlspecialchars($user->correo); ?></p>
                         </div>
                         <div class="py-1">
-                            <a href="<?php echo URL_PROJECT; ?>perfil/<?php echo $user->usuario; ?>" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="far fa-user w-4"></i> Mi Perfil</a>
-                            <?php if ($user->rol === 'creadora'): ?>
-                            <a href="<?php echo URL_PROJECT; ?>CreatorDashboardController" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-chart-line w-4"></i> Dashboard Creadora</a>
+                            <?php if ($user_rol === 'creadora'): ?>
+                                <a href="<?php echo URL_PROJECT; ?>perfil/<?php echo $user->usuario; ?>" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="far fa-user w-4"></i> Mi Perfil</a>
+                                <a href="<?php echo URL_PROJECT; ?>CreatorDashboardController" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-chart-line w-4"></i> Dashboard</a>
+                                <a href="<?php echo URL_PROJECT; ?>retiro" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50">💰 Cartera</a>
+                                <a href="<?php echo URL_PROJECT; ?>Historial" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-history w-4"></i> Historial</a>
+                                <a href="<?php echo URL_PROJECT; ?>settings" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-cog w-4"></i> Configuración</a>
+                            <?php else: ?>
+                                <a href="<?php echo URL_PROJECT; ?>perfil/<?php echo $user->usuario; ?>" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="far fa-user w-4"></i> Mi Perfil</a>
+                                <a href="<?php echo URL_PROJECT; ?>settings" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-cog w-4"></i> Configuración</a>
                             <?php endif; ?>
-                             <?php if ($user->rol === 'admin'): ?>
-                            <a href="<?php echo URL_PROJECT; ?>AdminDashboardController" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-shield-alt w-4"></i> Dashboard Admin</a>
-                            <?php endif; ?>
-                            <a href="<?php echo URL_PROJECT; ?>settings" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-cog w-4"></i> Configuración</a>
                         </div>
                         <div class="py-1 border-t border-slate-700"><a href="<?php echo URL_PROJECT; ?>home/salir" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-sign-out-alt w-4"></i> Salir</a></div>
                     </div>
@@ -123,11 +141,16 @@ if ($isLoggedIn) {
         </div>
     </div>
 
+    <!-- PANEL DEL MENÚ MÓVIL -->
     <div id="mobile-menu" class="hidden md:hidden">
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-slate-700/50">
             <a href="<?php echo URL_PROJECT; ?>home" class="flex items-center gap-3 block text-gray-300 hover:bg-slate-700/50 px-3 py-2 rounded-md text-base font-medium"><i class="fas fa-home w-5"></i>Inicio</a>
             <a href="<?php echo URL_PROJECT; ?>usuarios" class="flex items-center gap-3 block text-gray-300 hover:bg-slate-700/50 px-3 py-2 rounded-md text-base font-medium"><i class="fas fa-users w-5"></i>Explorar</a>
-            <a href="<?php echo URL_PROJECT; ?>live" class="flex items-center gap-3 block text-gray-300 hover:bg-slate-700/50 px-3 py-2 rounded-md text-base font-medium"><i class="fas fa-video w-5"></i>Live</a>
+            <a href="<?php echo URL_PROJECT; ?>live" class="flex items-center gap-3 block text-gray-300 hover:bg-slate-700/50 px-3 py-2 rounded-md text-base font-medium"><i class="fas fa-video w-5 text-red-500"></i>Live</a>
+            
+            <?php if ($isLoggedIn && $user_rol === 'creadora'): ?>
+                <a href="<?php echo URL_PROJECT; ?>live/stream" class="flex items-center gap-3 block text-white bg-pink-600/80 px-3 py-2 rounded-md text-base font-medium"><i class="fas fa-broadcast-tower w-5"></i>Hacer Live</a>
+            <?php endif; ?>
         </div>
         <?php if ($isLoggedIn): ?>
         <div class="pt-4 pb-3 border-t border-slate-700/50">
@@ -139,17 +162,21 @@ if ($isLoggedIn) {
                 </div>
             </div>
             <div class="mt-3 px-2 space-y-1">
-                 <a href="<?php echo URL_PROJECT; ?>mensajes" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="far fa-envelope w-5"></i>Mensajes</a>
-                 <a href="<?php echo URL_PROJECT; ?>NotificacionController" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="far fa-bell w-5"></i>Notificaciones</a>
-                 <div class="border-t border-slate-700 my-2"></div>
-                 <a href="<?php echo URL_PROJECT; ?>perfil/<?php echo $user->usuario; ?>" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="far fa-user w-5"></i>Mi Perfil</a>
-                <?php if ($user->rol === 'creadora'): ?>
-                <a href="<?php echo URL_PROJECT; ?>CreatorDashboardController" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="fas fa-chart-line w-5"></i>Dashboard</a>
+                 <!-- Links del menú móvil (sin cambios) -->
+                <a href="<?php echo URL_PROJECT; ?>mensajes" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="far fa-envelope w-5"></i>Mensajes</a>
+                <a href="<?php echo URL_PROJECT; ?>notificacion/verTodas" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="far fa-bell w-5"></i>Notificaciones</a>
+                <div class="border-t border-slate-700 my-2"></div>
+                
+                <?php if ($user_rol === 'creadora'): ?>
+                     <a href="<?php echo URL_PROJECT; ?>perfil/<?php echo $user->usuario; ?>" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="far fa-user w-5"></i>Mi Perfil</a>
+                    <a href="<?php echo URL_PROJECT; ?>CreatorDashboardController" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="fas fa-chart-line w-5"></i>Dashboard</a>
+                    <a href="<?php echo URL_PROJECT; ?>wallet" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50">💰 Cartera</a>
+                    <a href="<?php echo URL_PROJECT; ?>Historial" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-history w-4"></i> Historial</a>
+                <?php else: // Espectador ?>
+                    <a href="<?php echo URL_PROJECT; ?>perfil/<?php echo $user->usuario; ?>" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="far fa-user w-5"></i>Mi Perfil</a>
                 <?php endif; ?>
-                 <?php if ($user->rol === 'admin'): ?>
-                <a href="<?php echo URL_PROJECT; ?>AdminDashboardController" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="fas fa-shield-alt w-5"></i>Dashboard</a>
-                <?php endif; ?>
-                 <a href="<?php echo URL_PROJECT; ?>settings" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="fas fa-cog w-5"></i>Configuración</a>
+
+                <a href="<?php echo URL_PROJECT; ?>settings" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="fas fa-cog w-5"></i>Configuración</a>
                 <a href="<?php echo URL_PROJECT; ?>home/salir" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="fas fa-sign-out-alt w-5"></i>Salir</a>
             </div>
         </div>
@@ -157,8 +184,10 @@ if ($isLoggedIn) {
     </div>
 </nav>
 
+<!-- ✅ SCRIPT ORIGINAL RESTAURADO Y MEJORADO -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+    // --- LÓGICA DEL MENÚ MÓVIL (RESTAURADA) ---
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
     const mobileMenuIcon = document.getElementById('mobile-menu-icon');
@@ -171,14 +200,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const setupDropdown = (toggleButton, panelId) => {
-        const button = toggleButton;
+    // --- LÓGICA GENERAL PARA DROPDOWNS ---
+    const setupDropdown = (buttonId, panelId) => {
+        const button = document.getElementById(buttonId);
         const panel = document.getElementById(panelId);
         if (!button || !panel) return;
 
         button.addEventListener('click', (e) => {
             e.stopPropagation();
-            // Cierra otros dropdowns abiertos
+            // Cierra otros paneles abiertos antes de abrir el actual
             document.querySelectorAll('.dropdown-panel.open, .search-results.open').forEach(openPanel => {
                 if (openPanel !== panel) openPanel.classList.remove('open');
             });
@@ -186,6 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
     
+    // Cierra todos los dropdowns si se hace clic fuera
     window.addEventListener('click', (e) => {
         if (!e.target.closest('.relative')) {
             document.querySelectorAll('.dropdown-panel.open, .search-results.open').forEach(panel => {
@@ -194,6 +225,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Inicializa los dropdowns si el usuario ha iniciado sesión
+    <?php if ($isLoggedIn): ?>
+    setupDropdown('user-menu-button', 'user-menu-panel');
+    setupDropdown('notification-bell-button', 'notification-dropdown-panel');
+    <?php endif; ?>
+
+    // --- LÓGICA DE BÚSQUEDA (SIN CAMBIOS) ---
     const searchInput = document.getElementById('searchInput');
     const searchResults = document.getElementById('searchResults');
     let searchTimeout;
@@ -208,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             searchTimeout = setTimeout(() => {
-                fetch(`<?php echo URL_PROJECT; ?>searchcontroller/users?q=${encodeURIComponent(query)}`)
+                fetch(`<?php echo URL_PROJECT; ?>search/users?q=${encodeURIComponent(query)}`)
                 .then(res => res.json())
                 .then(data => {
                     searchResults.innerHTML = '';
@@ -232,11 +270,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 300);
         });
     }
-
-    <?php if ($isLoggedIn): ?>
-    // Pasar el botón real, no su ID como string
-    setupDropdown(document.getElementById('notification-bell'), 'notification-dropdown');
-    setupDropdown(document.getElementById('user-menu-button'), 'user-menu-panel');
-    <?php endif; ?>
 });
 </script>
+

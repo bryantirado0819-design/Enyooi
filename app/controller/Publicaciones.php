@@ -6,6 +6,7 @@ class Publicaciones extends Controller
     private $notificacionModel;
     private $likesModel;
     private $comentariosModel;
+    private $levelModel;
 
     public function __construct()
     {
@@ -17,6 +18,7 @@ class Publicaciones extends Controller
         $this->notificacionModel = $this->model('notificacion');
         $this->likesModel = $this->model('LikesModel');
         $this->comentariosModel = $this->model('comentariosModel');
+        $this->levelModel = $this->model('LevelModel');
     }
 
     private function notifySocketServer($endpoint, $data) {
@@ -176,6 +178,8 @@ class Publicaciones extends Controller
                 'usuarioAccion' => $idUsuario,
                 'idPublicacion' => $idPublicacion
             ]);
+            // --- ¡AQUÍ OTORGAMOS XP! ---
+            $this->levelModel->addXpAndLevelUp($idPropietario, 1); // +1 XP por like
         }
 
         $this->notifySocketServer('/notify/like', [
@@ -232,6 +236,8 @@ class Publicaciones extends Controller
                         'usuarioAccion' => $idUsuario,
                         'idPublicacion' => $idPublicacion
                      ]);
+                     // --- ¡AQUÍ OTORGAMOS XP! ---
+                 $this->levelModel->addXpAndLevelUp($idPropietario, 3);
                 }
                
                 $nuevoComentario = $this->comentariosModel->getComentarioById($idComentario);

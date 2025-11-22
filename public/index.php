@@ -3,11 +3,10 @@
 
 <?php
 // public/index.php
-
-// Inicia la sesión aquí, una sola vez para toda la aplicación.
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+ ini_set('display_errors', 0);
+    ini_set('log_errors', 1);
+// Inicia la sesión aquí, una sola vez para toda la aplicacióna
+session_start();
 
 require_once '../app/initializer.php'; // Cambiado para usar el inicializador
 

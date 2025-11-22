@@ -1,0 +1,217 @@
+/* --- Estilos Glassmorphism para Publicaciones y Comentarios --- */
+
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-primary: #e2e8f0; /* slate-200 */
+    --text-secondary: #94a3b8; /* slate-400 */
+    --accent-pink: #f43f5e; /* red-500 for likes */
+    --accent-blue: #38bdf8; /* sky-500 for comments */
+}
+
+/* Tarjeta Principal de Publicación */
+.post-card-glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 1rem; /* 16px */
+    padding: 1.5rem; /* 24px */
+    margin-bottom: 1.5rem;
+}
+
+/* Encabezado de la Publicación */
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* 12px */
+}
+
+.post-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 9999px;
+    object-fit: cover;
+    border: 2px solid var(--glass-border);
+}
+
+.post-user-info {
+    flex-grow: 1;
+}
+
+.post-user-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none;
+}
+.post-user-name:hover {
+    text-decoration: underline;
+    color: white;
+}
+
+.post-timestamp {
+    font-size: 0.8rem; /* 12px */
+    color: var(--text-secondary);
+    display: block;
+}
+
+.post-delete-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+.post-delete-btn:hover {
+    color: var(--accent-pink);
+}
+
+/* Contenido de la Publicación */
+.post-content {
+    margin-top: 1rem; /* 16px */
+    color: var(--text-primary);
+}
+.post-content p {
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+.post-media {
+    margin-top: 1rem;
+    border-radius: 0.75rem; /* 12px */
+    max-height: 600px;
+    width: 100%;
+    object-fit: cover;
+}
+.imagen-publicacion-usuario {
+    cursor: pointer;
+}
+
+/* Acciones (Like, Comentar) */
+.post-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem; /* 24px */
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+}
+.post-actions button {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+.post-actions button:hover {
+    transform: scale(1.1);
+}
+.like-btn:hover { color: var(--accent-pink); }
+.like-btn.like-active { color: var(--accent-pink); }
+.btn-comentarios-toggle:hover { color: var(--accent-blue); }
+
+
+/* Estructura de Comentarios */
+.comentarios-container {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--glass-border);
+}
+
+/* Formulario para Nuevo Comentario */
+.comment-form-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.comment-avatar-input {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.comment-form {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    border-radius: 9999px;
+}
+.comment-form input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    padding: 10px 15px;
+    color: var(--text-primary);
+    outline: none;
+}
+.comment-form button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 12px;
+    color: var(--text-secondary);
+}
+
+/* Lista de Comentarios */
+.lista-comentarios {
+    margin-top: 1.25rem; /* 20px */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* 16px */
+}
+
+.comment-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.comment-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.comment-glass {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.04); /* Ligeramente más claro que el post */
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.comment-user {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    text-decoration: none;
+}
+.comment-timestamp {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+.comment-content {
+    margin-top: 0.25rem;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* Modal de Imagen (para que se vea bien con el fondo) */
+.modal { display: none; position: fixed; z-index: 1050; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(10, 5, 20, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); align-items: center; justify-content: center; }
+.modal-content { margin: auto; display: block; max-width: 90%; max-height: 85%; border-radius: 0.5rem; }
+.blur { filter: blur(5px); }
+.close { position: absolute; top: 15px; right: 35px; color: #f1f1f1; font-size: 40px; font-weight: bold; transition: 0.3s; cursor: pointer;}
+.close:hover, .close:focus { color: #bbb; text-decoration: none; }

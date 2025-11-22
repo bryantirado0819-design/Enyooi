@@ -1,48 +1,55 @@
 <?php
-require_once '../app/helpers/helper.php'; // Ajusta la ruta si es necesario
+// app/libs/Core.php (Versión Mejorada)
+require_once '../app/helpers/helper.php';
 
 class Core {
-    protected $currentController = 'Home'; // Controlador por defecto
-    protected $currentMethod = 'index'; // Método por defecto
+    protected $currentController = 'Home';
+    protected $currentMethod = 'index';
     protected $parameters = [];
 
     public function __construct() {
         $url = $this->getURL();
 
         if (empty($url)) {
-            $url = ['Home', 'index']; // Si la URL está vacía, cargar Home/index
+            $url = ['Home', 'index'];
         }
 
-        // Verificar si el controlador existe
-        $controllerFile = '../app/controller/' . ucwords($url[0]) . '.php';
-        if (file_exists($controllerFile)) {
-            $this->currentController = ucwords($url[0]);
+        // ✅ INICIO DE LA SOLUCIÓN: Lógica de enrutamiento flexible
+        $controllerName = ucwords($url[0]);
+        
+        // Intenta encontrar el archivo con el sufijo "Controller" (ej: SuscripcionController.php)
+        $controllerFileWithSuffix = '../app/controller/' . $controllerName . 'Controller.php';
+        
+        // Intenta encontrar el archivo sin el sufijo (ej: Suscripcion.php)
+        $controllerFileSimple = '../app/controller/' . $controllerName . '.php';
+
+        if (file_exists($controllerFileWithSuffix)) {
+            $this->currentController = $controllerName . 'Controller';
+            require_once $controllerFileWithSuffix;
+            unset($url[0]);
+        } elseif (file_exists($controllerFileSimple)) {
+            $this->currentController = $controllerName;
+            require_once $controllerFileSimple;
             unset($url[0]);
         } else {
-            echo "Controlador no encontrado: " . ucwords($url[0]);
-            exit;
+            // Si no encuentra ninguna de las dos opciones, es un error 404.
+            // En un entorno de producción, aquí redirigirías a una página de error.
+            die("Error 404: El controlador '" . htmlspecialchars($controllerName) . "' no fue encontrado.");
         }
-
-        require_once $controllerFile;
+        
         $this->currentController = new $this->currentController;
+        // ✅ FIN DE LA SOLUCIÓN
 
-        // Verificar si se especificó un método y si existe en el controlador
+        // El resto del código no necesita cambios
         if (isset($url[1])) {
             if (method_exists($this->currentController, $url[1])) {
                 $this->currentMethod = $url[1];
                 unset($url[1]);
-            } else {
-                // Si el método no existe, llamar al método index y pasar el parámetro
-                $this->currentMethod = 'index';
             }
-        } else {
-            $this->currentMethod = 'index';
         }
 
-        // Obtener los parámetros de la URL
         $this->parameters = $url ? array_values($url) : [];
 
-        // Llamar al método del controlador con los parámetros
         call_user_func_array([$this->currentController, $this->currentMethod], $this->parameters);
     }
 
@@ -50,10 +57,8 @@ class Core {
         if (isset($_GET['url'])) {
             $url = rtrim($_GET['url'], '/');
             $url = filter_var($url, FILTER_SANITIZE_URL);
-            $url = explode('/', $url);
-            return $url;
-        } else {
-            return [];
+            return explode('/', $url);
         }
+        return [];
     }
 }

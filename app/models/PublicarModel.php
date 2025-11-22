@@ -43,33 +43,11 @@ class PublicarModel
      * Obtiene todas las publicaciones de un usuario específico.
      * Esta era la función que causaba el error fatal en Perfil.php.
      */
-    public function getPublicacionesUsuario($idUsuario) {
-        $this->db->query('
-            SELECT P.*, U.usuario, Per.foto_perfil, Per.nickname_artistico
-            FROM publicaciones P 
-            INNER JOIN usuarios U ON U.idUsuario = P.idUsuarioPublico 
-            LEFT JOIN perfil Per ON Per.idUsuario = P.idUsuarioPublico 
-            WHERE P.idUsuarioPublico = :idUsuario 
-            ORDER BY P.fechaPublicacion DESC
-        ');
-        $this->db->bind(':idUsuario', $idUsuario);
-        return $this->db->registers() ?: [];
-    }
+    
 
     public function getPostCountForUser($idUsuario)
     {
         $this->db->query('SELECT COUNT(*) as total FROM publicaciones WHERE idUsuarioPublico = :idUsuario');
-        $this->db->bind(':idUsuario', $idUsuario);
-        return (int)$this->db->single()->total;
-    }
-
-    public function getTotalLikesForUserPosts($idUsuario)
-    {
-        $this->db->query('
-            SELECT COUNT(*) as total FROM likes l
-            JOIN publicaciones p ON l.idPublicacion = p.idPublicacion
-            WHERE p.idUsuarioPublico = :idUsuario
-        ');
         $this->db->bind(':idUsuario', $idUsuario);
         return (int)$this->db->single()->total;
     }
@@ -85,6 +63,55 @@ class PublicarModel
         $this->db->bind(':idUsuario', $idUsuario);
         $this->db->bind(':tipo', $tipo);
         return (int)$this->db->single()->total;
+    }
+
+
+    public function getTotalLikesForUserPosts($idUsuario)
+    {
+        $this->db->query('
+            SELECT COUNT(*) as total FROM likes l
+            JOIN publicaciones p ON l.idPublicacion = p.idPublicacion
+            WHERE p.idUsuarioPublico = :idUsuario
+        ');
+        $this->db->bind(':idUsuario', $idUsuario);
+        return (int)$this->db->single()->total;
+    }
+
+    /**
+     * ✅ FUNCIÓN CORREGIDA Y AÑADIDA
+     * Obtiene todas las publicaciones de un usuario específico.
+     * Esta era la función que causaba el error fatal en Perfil.php.
+     */
+    public function getPublicacionesUsuario($idUsuario) {
+        $this->db->query('
+            SELECT P.*, U.usuario, Per.foto_perfil, Per.nickname_artistico
+            FROM publicaciones P 
+            INNER JOIN usuarios U ON U.idUsuario = P.idUsuarioPublico 
+            LEFT JOIN perfil Per ON Per.idUsuario = P.idUsuarioPublico 
+            WHERE P.idUsuarioPublico = :idUsuario 
+            ORDER BY P.fechaPublicacion DESC
+        ');
+        $this->db->bind(':idUsuario', $idUsuario);
+        return $this->db->registers() ?: [];
+    }
+
+    public function getTopEngagedPosts($creatorId, $limit = 5)
+    {
+        $this->db->query("
+            SELECT 
+                p.idPublicacion, 
+                p.contenidoPublicacion, 
+                p.tipo_archivo,
+                p.num_likes as likes,
+                (SELECT COUNT(*) FROM comentarios WHERE idPublicacion = p.idPublicacion) as comentarios
+            FROM publicaciones p
+            WHERE p.idUsuario = :creatorId
+            ORDER BY (p.num_likes + (SELECT COUNT(*) FROM comentarios WHERE idPublicacion = p.idPublicacion)) DESC
+            LIMIT :limit
+        ");
+        $this->db->bind(':creatorId', $creatorId);
+        $this->db->bind(':limit', (int) $limit, PDO::PARAM_INT);
+        return $this->db->resultSet();
     }
 
     public function getPublicacionById($id)

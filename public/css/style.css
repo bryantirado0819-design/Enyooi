@@ -7,6 +7,13 @@ body {
   color: #E0E0E0;
 }
 
+.contenido-publicacion-usuario p {
+  font-size: 1rem;
+  color: #e2e3e3;
+  white-space: pre-wrap; /* Mantiene saltos de línea */
+  word-break: break-word; /* ✅ SOLUCIÓN AL DESBORDAMIENTO */
+}
+
 /* Evita el scroll del body cuando el menú móvil está abierto */
 body.navbar-open {
   overflow: hidden;
@@ -235,7 +242,7 @@ header.fixed-top {
 
 /* Columna de Perfil */
 .perfil-usuario-main {
-  background-color: #2B2B2B;
+  background-color: #0f1323;
   border-radius: 10px;
   padding: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -287,7 +294,7 @@ header.fixed-top {
 
 /* Columna Principal (Publicaciones) */
 .container-usuario-publicar {
-  background-color: #2B2B2B; /* Fondo gris oscuro */
+  background-color: #0f1323; /* Fondo gris oscuro */
   border-radius: 10px;
   padding: 15px;
   margin-bottom: 20px;

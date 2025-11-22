@@ -60,4 +60,29 @@ function displayFlashMessage($name)
         unset($_SESSION[$name . '_class']);
     }
 }
+
+function format_time_ago($dateString) {
+    $timestamp = strtotime($dateString);
+    $now = time();
+    $seconds = $now - $timestamp;
+
+    if ($seconds < 10) {
+        return "hace un momento";
+    }
+    $minutes = round($seconds / 60);
+    $hours = round($seconds / 3600);
+    $days = round($seconds / 86400);
+
+    if ($seconds < 60) {
+        return "hace $seconds segundos";
+    } else if ($minutes < 60) {
+        return "hace $minutes minuto" . ($minutes > 1 ? "s" : "");
+    } else if ($hours < 24) {
+        return "hace $hours hora" . ($hours > 1 ? "s" : "");
+    } else if ($days < 7) {
+        return "hace $days día" . ($days > 1 ? "s" : "");
+    } else {
+        return date('d M Y', $timestamp);
+    }
+}
 ?>

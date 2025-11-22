@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="<?php echo URL_PROJECT; ?>/public/css/login.css">
     <link rel="stylesheet" href="<?php echo URL_PROJECT; ?>/public/css/register.css">
     <link rel="stylesheet" href="<?php echo URL_PROJECT; ?>/public/css/perfil.css">
-    <link rel="stylesheet" href="<?php echo URL_PROJECT; ?>/public/css/publicaciones.css">
+        <link rel="stylesheet" href="<?php echo URL_PROJECT; ?>/public/css/glassmorphism-feed.css">
    <script src="https://cdn.tailwindcss.com"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -28,6 +28,12 @@
     <link rel="icon" type="image/png" href="<?php echo URL_PROJECT; ?>/public/img/ico_enyooi.png"/>
 
     <title><?php echo PROJECT_NAME ?></title>
+     <script>
+        window.enyooiConfig = {
+            userId: <?php echo isset($_SESSION['logueando']) ? json_encode($_SESSION['logueando']) : 'null'; ?>,
+            urlBase: '<?php echo RUTA_URL; ?>'
+        };
+    </script>
 </head>
 <body>
 

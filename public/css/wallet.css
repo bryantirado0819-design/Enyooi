@@ -1,0 +1,237 @@
+/* public/css/wallet.css */
+
+/* --- Fondo y Efectos Globales --- */
+body {
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(124, 92, 255, 0.12), transparent 8%),
+                radial-gradient(1000px 600px at 90% 80%, rgba(255, 79, 163, 0.08), transparent 8%),
+                linear-gradient(180deg, #020617 0%, #081127 100%);
+    color: #e6eef8;
+    overflow-x: hidden;
+}
+
+.blob { 
+    position: fixed; 
+    border-radius: 9999px; 
+    filter: blur(60px); 
+    opacity: 0.25; 
+    mix-blend-mode: screen; 
+    animation: float 20s ease-in-out infinite; 
+    z-index: -1; 
+}
+.blob.b1 { width: 450px; height: 450px; left: -100px; top: -100px; background: #7c5cff; }
+.blob.b2 { width: 350px; height: 350px; right: -80px; top: 10%; background: #ff4fa3; animation-delay: 4s; }
+.blob.b3 { width: 400px; height: 400px; left: 40%; bottom: -150px; background: #8972ff; animation-delay: 8s; }
+@keyframes float { 0% { transform: translateY(0) translateX(0); } 50% { transform: translateY(-40px) translateX(20px); } 100% { transform: translateY(0) translateX(0); } }
+
+.wallet-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px); /* Resta la altura del navbar */
+    padding: 2rem;
+}
+
+/* --- Tarjeta Principal de Cristal --- */
+.glass-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 24px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 700px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* --- Display del Saldo --- */
+.balance-display {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ... otros estilos ... */
+
+.balance-display h1 {
+    font-size: 4rem;
+    line-height: 1;
+    background: linear-gradient(to right, #ffffff, #c2d1ff);
+    -webkit-background-clip: text; /* Para Chrome/Safari */
+    background-clip: text;         /* ✅ Propiedad estándar añadida */
+    -webkit-text-fill-color: transparent;
+}
+
+.balance-display .zafiro-text {
+    font-weight: 600;
+    font-size: 3rem;
+    background: linear-gradient(to right, #ff7bbd, #7c5cff);
+    -webkit-background-clip: text; /* Para Chrome/Safari */
+    background-clip: text;         /* ✅ Propiedad estándar añadida */
+    -webkit-text-fill-color: transparent;
+}
+
+/* ... otros estilos ... */
+
+
+
+/* --- Paquetes de Recarga --- */
+.recharge-packages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+}
+
+.package-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
+    color: white;
+}
+
+.package-card:before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 79, 163, 0.15) 0%, rgba(255,255,255,0) 70%);
+    transition: opacity 0.5s;
+    opacity: 0;
+    transform: rotate(0deg);
+}
+
+.package-card:hover:before {
+    opacity: 1;
+    animation: rotate 4s linear infinite;
+}
+
+.package-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(255, 79, 163, 0.5);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.package-gem {
+    font-size: 2.5rem;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.package-amount {
+    display: block;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.package-price {
+    display: block;
+    font-size: 0.9rem;
+    color: #a7b5d1;
+}
+
+.package-card.popular {
+    border-color: #ff4fa3;
+}
+
+.popular-badge {
+    position: absolute;
+    top: 10px;
+    right: -25px;
+    background: #ff4fa3;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: bold;
+    padding: 2px 30px;
+    transform: rotate(45deg);
+}
+
+/* --- Sección de Pago Datafast --- */
+.datafast-wrapper {
+    background-color: #f7f8f9;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+/* --- Animaciones --- */
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ... (pega esto al final de tu archivo wallet.css) ... */
+
+/* --- Estilos para los Modales de Notificación --- */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(10, 5, 20, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    animation: fadeIn 0.3s forwards;
+}
+
+.modal-backdrop.hidden {
+    display: none;
+}
+
+.modal-panel {
+    background: rgba(25, 15, 50, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+    transform: scale(0.95);
+    opacity: 0;
+    animation: popIn 0.4s 0.1s forwards;
+}
+
+#modal-icon {
+    font-size: 3rem;
+    line-height: 1;
+}
+
+.modal-button {
+    margin-top: 1.5rem;
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 12px;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(to right, var(--accent), var(--accent-2));
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.modal-button:hover {
+    transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+@keyframes popIn {
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

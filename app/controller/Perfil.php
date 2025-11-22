@@ -4,16 +4,16 @@ class Perfil extends Controller
 {
     private $usuarioModel;
     private $publicarModel;
-    private $likesModel;
-    private $comentariosModel;
+    private $suscripcionModel;
+    private $contenidoModel;
 
     public function __construct()
     {
-        // Load necessary models cleanly
+        // ✅ SOLUCIÓN: Cargando los modelos con los nombres exactos de tus archivos.
         $this->usuarioModel = $this->model('usuario');
-        $this->publicarModel = $this->model('PublicarModel');
-        $this->likesModel = $this->model('LikesModel');
-        $this->comentariosModel = $this->model('comentariosModel');
+        $this->publicarModel = $this->model('publicar'); 
+        $this->suscripcionModel = $this->model('SuscripcionModel');
+        $this->contenidoModel = $this->model('ContenidoModel');
     }
 
     public function index($username = '')
@@ -22,43 +22,54 @@ class Perfil extends Controller
             redirection('/home/entrar');
         }
         
-        // Get data for the user whose profile is being visited
         $usuarioVisitado = $this->usuarioModel->getUsuario($username);
         if (!$usuarioVisitado) {
-            redirection('/home'); // Redirect home if the user doesn't exist
+            redirection('/home');
         }
 
         $idUsuarioVisitado = $usuarioVisitado->idUsuario;
         $idUsuarioLogueado = $_SESSION['logueando'];
         
-        $datosPerfil = $this->usuarioModel->getPerfil($idUsuarioVisitado);
-        $publicaciones = $this->publicarModel->getPublicacionesUsuario($idUsuarioVisitado);
-        
+        $esPropietario = ($idUsuarioLogueado == $idUsuarioVisitado);
+
+        $isSubscribed = $this->suscripcionModel->verificarSuscripcion($idUsuarioLogueado, $idUsuarioVisitado);
+        $puedeVerContenido = $esPropietario || $isSubscribed;
+        $publicacionesDesbloqueadas = $this->contenidoModel->getContenidoDesbloqueadoPorUsuario($idUsuarioLogueado);
+        $perfilLogueado = $this->usuarioModel->getPerfil($idUsuarioLogueado);
+
+        // Obtenemos los IDs de las publicaciones que le gustan al usuario logueado
+        $misLikesObj = $this->usuarioModel->misLikes($idUsuarioLogueado);
+        $misLikesIds = [];
+        foreach ($misLikesObj as $like) {
+            $misLikesIds[] = $like->idPublicacion;
+        }
+
         $stats = [
             'fotos' => $this->publicarModel->getMediaCountForUser($idUsuarioVisitado, 'imagen'),
             'videos' => $this->publicarModel->getMediaCountForUser($idUsuarioVisitado, 'video'),
             'likes' => $this->publicarModel->getTotalLikesForUserPosts($idUsuarioVisitado)
         ];
         
-        // ✅ CORRECTION: The missing array keys are now included.
         $datos = [
-            'perfil' => $datosPerfil, 
+            'perfil' => $this->usuarioModel->getPerfil($idUsuarioVisitado), 
             'usuario' => $usuarioVisitado, 
-            'publicaciones' => $publicaciones,
+            'publicaciones' => $this->publicarModel->getPublicacionesUsuario($idUsuarioVisitado),
             'stats' => $stats, 
-            'esPropietario' => ($idUsuarioLogueado == $idUsuarioVisitado),
-            'likesModel' => $this->likesModel, 
-            'comentariosModel' => $this->comentariosModel,
-            
-            // --- MISSING KEYS ADDED ---
-            'puedeVerContenido' => true, // Placeholder logic: you can change this based on subscription status
-            'isSubscribed' => false,     // Placeholder logic: you can change this based on subscription status
-            'editProfileLink' => RUTA_URL . '/settings' // Dynamic link to the settings page
+            'esPropietario' => $esPropietario,
+            'likesModel' => $this->publicarModel, 
+            'comentariosModel' => $this->publicarModel,
+            'puedeVerContenido' => $puedeVerContenido,
+            'isSubscribed' => $isSubscribed,
+            'publicacionesDesbloqueadas' => $publicacionesDesbloqueadas,
+            'editProfileLink' => RUTA_URL . '/settings',
+            'misLikes' => $misLikesIds,
+            'user_avatar' => $perfilLogueado->foto_perfil ?? 'public/img/defaults/default_avatar.png'
         ];
 
         $this->view('pages/perfil', $datos);
     }
     
+    // ... (El resto de tu controlador se mantiene igual)
     public function cambiarImagen()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_SESSION['logueando'])) {
@@ -69,9 +80,8 @@ class Perfil extends Controller
         
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
             $nombreArchivo = time() . '_' . basename($_FILES['imagen']['name']);
-            // Corrected to use RUTA_PUBLIC for the physical path
             $directorioDestino = RUTA_PUBLIC . '/img/Fotos/';
-            $rutaDestinoBD = 'img/Fotos/' . $nombreArchivo; // Relative path for the DB
+            $rutaDestinoBD = 'img/Fotos/' . $nombreArchivo;
             
             if (!is_dir($directorioDestino)) {
                 mkdir($directorioDestino, 0777, true);
@@ -79,15 +89,14 @@ class Perfil extends Controller
             $rutaCompleta = $directorioDestino . $nombreArchivo;
 
             if (move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaCompleta)) {
-                // We assume the PerfilModel has a method for editing the photo
                 $perfilModel = $this->model('PerfilModel');
                 if ($perfilModel->editarfoto(['idUsuario' => $idUsuario, 'ruta' => $rutaDestinoBD])) {
                     redirection('/perfil/' . $_SESSION['usuario']);
                 } else {
-                    die("Error updating the database.");
+                    die("Error al actualizar la base de datos.");
                 }
             } else {
-                die("Error moving the uploaded file.");
+                die("Error al mover el archivo subido.");
             }
         } else {
             redirection('/perfil/' . $_SESSION['usuario']);

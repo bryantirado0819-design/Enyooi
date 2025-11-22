@@ -1,0 +1,253 @@
+/* public/css/live_viewer.css */
+
+:root { 
+    --accent: #ff4fa3; 
+    --accent-2: #7c5cff;
+    --dark-bg: #081127;
+}
+
+/* Fondo y Scrollbar */
+body { 
+    font-family: 'Poppins', sans-serif; 
+    background-color: var(--dark-bg);
+    background-image: radial-gradient(circle at 10% 10%, rgba(124, 92, 255, 0.15), transparent 30%),
+                      radial-gradient(circle at 90% 80%, rgba(255, 79, 163, 0.12), transparent 40%);
+    color: #e2e8f0;
+    overflow: hidden; /* Evitar scroll en el body principal para el layout tipo app */
+    height: 100vh;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+.custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(124, 92, 255, 0.3); border-radius: 6px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: var(--accent-2); }
+
+/* Glassmorphism */
+.glass-card {
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Botón de Like Animado */
+.like-btn-float {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: linear-gradient(135deg, #f43f5e, #e11d48);
+    border: 2px solid rgba(255,255,255,0.2);
+    box-shadow: 0 0 20px rgba(244, 63, 94, 0.4);
+}
+.like-btn-float:hover {
+    transform: scale(1.15) rotate(5deg);
+    box-shadow: 0 0 30px rgba(244, 63, 94, 0.6);
+}
+.like-btn-float:active {
+    transform: scale(0.95);
+}
+.like-btn-float i {
+    animation: heartbeat 1.5s infinite;
+}
+
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.3); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.15); }
+    60% { transform: scale(1); }
+}
+
+/* Tabs */
+.tab-button {
+    color: #94a3b8;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.tab-button:hover {
+    color: white;
+    background: rgba(255,255,255,0.05);
+}
+.tab-button.active {
+    background: linear-gradient(to right, var(--accent), var(--accent-2));
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(255, 79, 163, 0.3);
+}
+
+/* Contenido de Tabs */
+.tab-content {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    height: 100%;
+}
+.tab-content.active {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+}
+
+/* Mensajes de Chat */
+.chat-message {
+    margin-bottom: 0.5rem;
+    animation: fadeIn 0.3s ease-out;
+    word-wrap: break-word;
+}
+.chat-message.creator {
+    background: linear-gradient(90deg, rgba(255, 79, 163, 0.15), transparent);
+    border-left: 3px solid var(--accent);
+}
+.chat-message.own-message {
+    background: linear-gradient(90deg, rgba(124, 92, 255, 0.15), transparent);
+    border-left: 3px solid var(--accent-2);
+}
+.chat-message.donation {
+    background: linear-gradient(90deg, rgba(250, 204, 21, 0.15), transparent);
+    border-left: 3px solid #facc15;
+    color: #fef08a;
+    text-align: center;
+    padding: 8px;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 1023px) {
+    body { overflow-y: auto; height: auto; }
+    .live-layout { flex-direction: column; height: auto; }
+    .video-column { width: 100%; height: 60vh; min-height: 300px; }
+    .chat-column { width: 100%; height: 600px; }
+}/* public/css/live_viewer.css */
+
+:root { 
+    --accent: #ff4fa3; 
+    --accent-2: #7c5cff;
+    --dark-bg: #081127;
+}
+
+/* Fondo y Scrollbar */
+body { 
+    font-family: 'Poppins', sans-serif; 
+    background-color: var(--dark-bg);
+    background-image: radial-gradient(circle at 10% 10%, rgba(124, 92, 255, 0.15), transparent 30%),
+                      radial-gradient(circle at 90% 80%, rgba(255, 79, 163, 0.12), transparent 40%);
+    color: #e2e8f0;
+    overflow: hidden; /* Evitar scroll en el body principal para el layout tipo app */
+    height: 100vh;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+.custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(124, 92, 255, 0.3); border-radius: 6px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: var(--accent-2); }
+
+/* Glassmorphism */
+.glass-card {
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Botón de Like Animado */
+.like-btn-float {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: linear-gradient(135deg, #f43f5e, #e11d48);
+    border: 2px solid rgba(255,255,255,0.2);
+    box-shadow: 0 0 20px rgba(244, 63, 94, 0.4);
+}
+.like-btn-float:hover {
+    transform: scale(1.15) rotate(5deg);
+    box-shadow: 0 0 30px rgba(244, 63, 94, 0.6);
+}
+.like-btn-float:active {
+    transform: scale(0.95);
+}
+.like-btn-float i {
+    animation: heartbeat 1.5s infinite;
+}
+
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.3); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.15); }
+    60% { transform: scale(1); }
+}
+
+/* Tabs */
+.tab-button {
+    color: #94a3b8;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.tab-button:hover {
+    color: white;
+    background: rgba(255,255,255,0.05);
+}
+.tab-button.active {
+    background: linear-gradient(to right, var(--accent), var(--accent-2));
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(255, 79, 163, 0.3);
+}
+
+/* Contenido de Tabs */
+.tab-content {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    height: 100%;
+}
+.tab-content.active {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+}
+
+/* Mensajes de Chat */
+.chat-message {
+    margin-bottom: 0.5rem;
+    animation: fadeIn 0.3s ease-out;
+    word-wrap: break-word;
+}
+.chat-message.creator {
+    background: linear-gradient(90deg, rgba(255, 79, 163, 0.15), transparent);
+    border-left: 3px solid var(--accent);
+}
+.chat-message.own-message {
+    background: linear-gradient(90deg, rgba(124, 92, 255, 0.15), transparent);
+    border-left: 3px solid var(--accent-2);
+}
+.chat-message.donation {
+    background: linear-gradient(90deg, rgba(250, 204, 21, 0.15), transparent);
+    border-left: 3px solid #facc15;
+    color: #fef08a;
+    text-align: center;
+    padding: 8px;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 1023px) {
+    body { overflow-y: auto; height: auto; }
+    .live-layout { flex-direction: column; height: auto; }
+    .video-column { width: 100%; height: 60vh; min-height: 300px; }
+    .chat-column { width: 100%; height: 600px; }
+}

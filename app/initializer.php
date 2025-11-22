@@ -1,7 +1,10 @@
 <?php
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 // app/initializer.php
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 // Configuración principal y conexión a la base de datos
 require_once __DIR__ . '/config/config.php';
 
@@ -23,7 +26,7 @@ if (file_exists($helperPath)) {
     die("El archivo helper.php no se encuentra en la ruta especificada: $helperPath");
 }
 
-// Autoload Core Libraries
+// ✅ MEJORA: Autoloader a prueba de errores JSON
 spl_autoload_register(function($className) {
     $paths = [
         __DIR__ . '/libs/' . $className . '.php',
@@ -37,6 +40,14 @@ spl_autoload_register(function($className) {
         }
     }
 
-    die("No se pudo encontrar la clase: $className en las rutas especificadas.");
+    // En lugar de 'die()', devolvemos un JSON de error.
+    header('Content-Type: application/json; charset=utf-8');
+    http_response_code(500); // Internal Server Error
+    echo json_encode([
+        'success' => false,
+        'message' => "Error Crítico del Servidor: No se pudo encontrar la clase '{$className}'.",
+        'detail' => 'Autoloader failed.'
+    ]);
+    exit();
 });
 ?>

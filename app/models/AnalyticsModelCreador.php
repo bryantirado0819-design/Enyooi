@@ -1,41 +1,78 @@
 <?php
-// app/models/AnalyticsModel.php
-require_once __DIR__ . '/../../config/config.php';
+// app/models/AnalyticsModelCreador.php
 
-class AnalyticsModel {
-  public function revenueSplitCreator(){
-    $st = db()->prepare("SELECT value FROM system_settings WHERE `key`='revenue_split_creator'");
-    $st->execute(); $v = $st->fetchColumn();
-    return $v ? (float)$v : 60.0;
-  }
-  public function setRevenueSplitCreator($pct){
-    $st = db()->prepare("INSERT INTO system_settings(`key`,`value`) VALUES('revenue_split_creator',?) ON DUPLICATE KEY UPDATE `value`=VALUES(`value`)");
-    return $st->execute([ (string)$pct ]);
-  }
-  public function dailyRegistrations($days=7){
-    $st = db()->prepare("SELECT DATE(registered_at) d, COUNT(*) c FROM registrations WHERE registered_at >= CURDATE() - INTERVAL ? DAY GROUP BY DATE(registered_at) ORDER BY d ASC");
-    $st->execute([$days]); return $st->fetchAll();
-  }
-  public function todaysLoginsByCountry(){
-    $st = db()->query("SELECT COALESCE(country,'Desconocido') country, COUNT(*) c FROM user_logins WHERE DATE(logged_at)=CURDATE() GROUP BY country ORDER BY c DESC");
-    return $st->fetchAll();
-  }
-  public function globalZafirosTotal(){
-    $st = db()->query("SELECT SUM(balance) FROM zafiros_wallet"); return (int)($st->fetchColumn() ?: 0);
-  }
-  public function creatorBalanceZafiros($user_id){
-    $st = db()->prepare("SELECT balance FROM zafiros_wallet WHERE user_id=?"); $st->execute([$user_id]);
-    return (int)($st->fetchColumn() ?: 0);
-  }
-  public function creatorStreams($creator_id){
-    $st = db()->prepare("SELECT * FROM stream_sessions WHERE creator_id=? ORDER BY id DESC"); $st->execute([$creator_id]); return $st->fetchAll();
-  }
-  public function viewersByGeo($creator_id){
-    $st = db()->prepare("SELECT COALESCE(country,'Desconocido') country, COUNT(*) viewers FROM stream_views sv JOIN stream_sessions ss ON ss.id=sv.stream_id WHERE ss.creator_id=? GROUP BY country ORDER BY viewers DESC");
-    $st->execute([$creator_id]); return $st->fetchAll();
-  }
-  public function viewersByCity($creator_id){
-    $st = db()->prepare("SELECT COALESCE(city,'Desconocida') city, COUNT(*) viewers FROM stream_views sv JOIN stream_sessions ss ON ss.id=sv.stream_id WHERE ss.creator_id=? GROUP BY city ORDER BY viewers DESC LIMIT 10");
-    $st->execute([$creator_id]); return $st->fetchAll();
-  }
+// ✅ CORRECCIÓN: Se eliminó la línea "require_once" que causaba el error.
+// El archivo initializer.php ya carga la configuración por nosotros.
+
+class AnalyticsModelCreador
+{
+    private $db;
+
+    public function __construct()
+    {
+        $this->db = new Base;
+    }
+
+    public function creatorBalanceZafiros($idUsuario)
+    {
+        try {
+            $this->db->query("SELECT saldo_zafiros FROM usuarios WHERE idUsuario = :id_usuario");
+            $this->db->bind(':id_usuario', $idUsuario);
+            $resultado = $this->db->single();
+            return $resultado ? (int)$resultado->saldo_zafiros : 0;
+        } catch (Exception $e) {
+            error_log('Error en creatorBalanceZafiros: ' . $e->getMessage());
+            return 0;
+        }
+    }
+
+    public function getRecentEarnings($creatorId, $days)
+    {
+        $this->db->query("
+            SELECT 
+                SUM(monto_neto_usd) as total_net_usd,
+                DATE(fecha) as date
+            FROM transacciones_financieras
+            WHERE id_usuario = :creatorId 
+              AND tipo LIKE 'ingreso_%'
+              AND fecha >= CURDATE() - INTERVAL :days DAY
+            GROUP BY DATE(fecha)
+            ORDER BY DATE(fecha) ASC
+        ");
+        $this->db->bind(':creatorId', $creatorId);
+        $this->db->bind(':days', $days);
+        $dailyData = $this->db->resultSet();
+
+        $total = array_sum(array_column($dailyData, 'total_net_usd'));
+
+        return [
+            'total_net_usd' => $total,
+            'daily_data' => $dailyData
+        ];
+    }
+    
+    public function getRevenueSources($creatorId)
+    {
+        $this->db->query("
+            SELECT 
+                CASE
+                    WHEN tipo = 'ingreso_suscripcion' THEN 'Suscripciones'
+                    WHEN tipo = 'ingreso_contenido_pago' THEN 'Venta Contenido'
+                    WHEN tipo = 'ingreso_propina_chat' OR tipo = 'ingreso_propina_live' THEN 'Propinas'
+                    WHEN tipo = 'ingreso_desbloqueo_chat' THEN 'Chats'
+                    ELSE 'Otros'
+                END as source,
+                SUM(monto_neto_usd) as total
+            FROM transacciones_financieras
+            WHERE id_usuario = :creatorId AND tipo LIKE 'ingreso_%' AND fecha >= CURDATE() - INTERVAL 30 DAY
+            GROUP BY source
+        ");
+        $this->db->bind(':creatorId', $creatorId);
+        $results = $this->db->resultSet();
+        
+        $labels = array_column($results, 'source');
+        $data = array_column($results, 'total');
+
+        return ['labels' => $labels, 'data' => $data];
+    }
 }

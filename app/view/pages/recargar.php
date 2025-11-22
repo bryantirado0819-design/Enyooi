@@ -1,96 +1,119 @@
 <?php
-// app/view/pages/recargar.php
-session_start();
-require_once __DIR__ . '/../../api/db_connect.php';
-if (empty($_SESSION['logueando'])) { header('Location: /public/login.php'); exit; }
+include_once __DIR__ . '/../custom/header.php';
+include_once __DIR__ . '/../custom/navbar.php';
 ?>
-<!doctype html>
-<html lang="es">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Recargar Zafiros — ENYOOI</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-:root{--accent:#ff4fa3;--accent-2:#7c5cff}
-html,body{height:100%;margin:0;padding:0;font-family:'Poppins',sans-serif;background:radial-gradient(1200px 600px at 10% 10%,rgba(124,92,255,0.12),transparent 8%),radial-gradient(1000px 600px at 90% 80%,rgba(255,79,163,0.08),transparent 8%),linear-gradient(180deg,#020617 0%,#081127 100%);color:#e6eef8}
-.blob{position:absolute;border-radius:9999px;filter:blur(42px);opacity:0.22;mix-blend-mode:screen;animation:float 14s ease-in-out infinite;z-index:-1}
-.blob.b1{width:420px;height:420px;left:-80px;top:-80px;background:linear-gradient(135deg,var(--accent),#d46fcb)}
-.blob.b2{width:300px;height:300px;right:-40px;top:40px;background:linear-gradient(135deg,var(--accent-2),#68a6ff);animation-delay:3s}
-.blob.b3{width:360px;height:360px;left:45%;bottom:-100px;background:linear-gradient(135deg,#ffa3d9,#a88bff);animation-delay:6s}
-.card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);backdrop-filter:blur(6px);border-radius:12px;padding:18px}
-.btn{background:linear-gradient(135deg,var(--accent),var(--accent-2));padding:10px 14px;border-radius:10px;color:#071022;font-weight:700}
-</style>
-</head>
+
+<link rel="stylesheet" href="<?php echo URL_PROJECT; ?>/public/css/wallet.css">
+
 <body>
-<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
-<?php include __DIR__ . '/../includes/navbar_zafiros.php'; ?>
-<main class="min-h-screen flex items-center justify-center p-6">
-  <div class="max-w-2xl w-full card">
-    <h1 class="text-2xl font-bold mb-2">Recargar Zafiros</h1>
-    <p class="text-blue-200 mb-4">Elige una recarga y sigue al proceso de pago seguro con Datafast.</p>
-    <form id="recargaForm" class="grid grid-cols-1 gap-4">
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <label class="p-3 rounded-xl bg-white/3 border border-white/6 cursor-pointer">
-          <input type="radio" name="package" value="100" data-price="10" class="hidden">
-          <div class="font-semibold">100 Zafiros</div>
-          <div class="text-sm text-blue-200">$10</div>
-        </label>
-        <label class="p-3 rounded-xl bg-white/3 border border-white/6 cursor-pointer">
-          <input type="radio" name="package" value="250" data-price="20" class="hidden">
-          <div class="font-semibold">250 Zafiros</div>
-          <div class="text-sm text-blue-200">$20</div>
-        </label>
-        <label class="p-3 rounded-xl bg-white/3 border border-white/6 cursor-pointer">
-          <input type="radio" name="package" value="600" data-price="45" class="hidden">
-          <div class="font-semibold">600 Zafiros</div>
-          <div class="text-sm text-blue-200">$45</div>
-        </label>
-      </div>
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
 
-      <div class="flex items-center gap-3">
-        <label class="label">Monedero</label>
-        <div id="selected" class="ml-auto text-sm">Selecciona un paquete</div>
-      </div>
+    <div class="wallet-container">
+        <div class="glass-card">
+            
+            <div class="balance-display">
+                <h4 class="text-blue-200 font-light">Tu Saldo Actual</h4>
+                <h1 class="font-bold tracking-tighter"><?php echo number_format($datos['saldo_zafiros']); ?> <span class="zafiro-text">Zafiros</span></h1>
+            </div>
 
-      <button id="payBtn" class="btn w-full">Pagar con Datafast</button>
-    </form>
-    <div id="msg" class="text-sm mt-3"></div>
-  </div>
-</main>
+            <?php if (empty($datos['checkoutId'])) : ?>
+                <div id="packages-section">
+                    <h2 class="text-center text-2xl font-bold text-white mb-2">Elige tu Paquete</h2>
+                    <p class="text-center text-sm text-blue-200 mb-6">La transacción es 100% segura a través de Datafast.</p>
+                    
+                    <div class="recharge-packages">
+                        <form action="<?php echo URL_PROJECT; ?>/wallet/preparePayment" method="POST">
+                            <input type="hidden" name="zafiros" value="100">
+                            <input type="hidden" name="monto" value="1.00">
+                            <button type="submit" class="package-card">
+                                <div class="package-gem">💎</div>
+                                <div class="package-info">
+                                    <span class="package-amount">100 Zafiros</span>
+                                    <span class="package-price">$1.00 USD</span>
+                                </div>
+                            </button>
+                        </form>
+                        <form action="<?php echo URL_PROJECT; ?>/wallet/preparePayment" method="POST">
+                            <input type="hidden" name="zafiros" value="550">
+                            <input type="hidden" name="monto" value="5.00">
+                            <button type="submit" class="package-card popular">
+                                <div class="popular-badge">POPULAR</div>
+                                <div class="package-gem">💎</div>
+                                <div class="package-info">
+                                    <span class="package-amount">550 Zafiros</span>
+                                    <span class="package-price">$5.00 USD</span>
+                                </div>
+                            </button>
+                        </form>
+                        <form action="<?php echo URL_PROJECT; ?>/wallet/preparePayment" method="POST">
+                            <input type="hidden" name="zafiros" value="1200">
+                            <input type="hidden" name="monto" value="10.00">
+                            <button type="submit" class="package-card">
+                                <div class="package-gem">💎</div>
+                                <div class="package-info">
+                                    <span class="package-amount">1200 Zafiros</span>
+                                    <span class="package-price">$10.00 USD</span>
+                                </div>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            <?php else : ?>
+                <div id="payment-section" class="text-center">
+                    <h2 class="text-2xl font-bold text-white mb-4">Completa tu pago de forma segura</h2>
+                    <div class="datafast-wrapper">
+                        <script src="https://test.datapago.com/v1/paymentWidgets.js?checkoutId=<?php echo $datos['checkoutId']; ?>"></script>
+                        <form action="<?php echo URL_PROJECT; ?>/wallet/success" class="paymentWidgets" data-brands="VISA MASTER AMEX DISCOVER"></form>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
 
-<script>
-document.querySelectorAll('input[name="package"]').forEach(r=>{
-  r.addEventListener('change', ()=>{
-    const sel = document.querySelector('input[name="package"]:checked');
-    if (sel) {
-      document.getElementById('selected').textContent = sel.value + ' Zafiros — $' + sel.dataset.price;
-    }
-  });
-});
-
-document.getElementById('recargaForm').addEventListener('submit', async e=>{
-  e.preventDefault();
-  const sel = document.querySelector('input[name="package"]:checked');
-  const msg = document.getElementById('msg');
-  if (!sel) { msg.textContent = 'Selecciona un paquete'; return; }
-  const zafiros = sel.value;
-  const monto = sel.dataset.price;
-
-  msg.textContent = 'Iniciando pago...';
-  const fd = new FormData();
-  fd.append('zafiros', zafiros);
-  fd.append('monto', monto);
-
-  try {
-    const res = await fetch('/api/create_payment.php', { method: 'POST', body: fd, credentials:'include' });
-    const j = await res.json();
-    if (!j.ok) { msg.textContent = 'Error: ' + (j.error || 'no se pudo crear pago'); return; }
-    // redirigir al checkout real (o al simulador en sandbox)
-    window.location.href = j.redirect;
-  } catch (err) { msg.textContent = 'Error de red'; }
-});
-</script>
+    <div id="payment-modal-backdrop" class="modal-backdrop hidden">
+        <div id="payment-modal" class="modal-panel">
+            <div id="modal-icon"></div>
+            <h2 id="modal-title" class="text-2xl font-bold text-white mt-4"></h2>
+            <p id="modal-message" class="text-blue-200 mt-2"></p>
+            <button id="modal-close-btn" class="modal-button">Entendido</button>
+        </div>
+    </div>
 </body>
-</html>
+
+<?php if (isset($datos['payment_status'])): ?>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const status = <?php echo json_encode($datos['payment_status']); ?>;
+        
+        const backdrop = document.getElementById('payment-modal-backdrop');
+        const modal = document.getElementById('payment-modal');
+        const icon = document.getElementById('modal-icon');
+        const title = document.getElementById('modal-title');
+        const message = document.getElementById('modal-message');
+        const closeBtn = document.getElementById('modal-close-btn');
+
+        if (status.type === 'success') {
+            icon.innerHTML = '✅';
+            title.textContent = '¡Pago Exitoso!';
+            message.textContent = status.message;
+        } else {
+            icon.innerHTML = '❌';
+            title.textContent = 'Error en el Pago';
+            message.textContent = status.message;
+        }
+        
+        backdrop.classList.remove('hidden');
+        
+        closeBtn.addEventListener('click', () => backdrop.classList.add('hidden'));
+        backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) {
+                backdrop.classList.add('hidden');
+            }
+        });
+    });
+</script>
+<?php endif; ?>
+
+<?php include_once __DIR__ . '/../custom/footer.php'; ?>

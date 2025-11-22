@@ -20,6 +20,25 @@ class publicar
         return $this->db->execute();
     }
 
+    public function getTopEngagedPosts($creatorId, $limit = 5)
+    {
+        $this->db->query("
+            SELECT 
+                p.idPublicacion, 
+                p.contenidoPublicacion, 
+                p.tipo_archivo,
+                p.num_likes as likes,
+                (SELECT COUNT(*) FROM comentarios WHERE idPublicacion = p.idPublicacion) as comentarios
+            FROM publicaciones p
+            WHERE p.idUsuario = :creatorId
+            ORDER BY (p.num_likes + (SELECT COUNT(*) FROM comentarios WHERE idPublicacion = p.idPublicacion)) DESC
+            LIMIT :limit
+        ");
+        $this->db->bind(':creatorId', $creatorId);
+        $this->db->bind(':limit', (int) $limit, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
     public function getPublicaciones()
     {
         $this->db->query('
