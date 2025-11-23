@@ -15,9 +15,6 @@ const fetch = require('node-fetch'); // Opcional si usas fetch interno
 // ⚙️ CONFIGURACIÓN DEL SISTEMA (¡EDITAR ESTO!)
 // ================================================================
 
-// 1. IP PÚBLICA (CRÍTICO PARA DEMO REMOTO)
-// Si estás en local, usa "0.0.0.0".
-// Si estás en un VPS/Servidor, pon la IP real (ej: "164.92.123.45")
 const PUBLIC_IP = "127.0.0.1"; 
 
 // 2. DATOS DE BASE DE DATOS (MySQL)

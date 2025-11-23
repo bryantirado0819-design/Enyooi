@@ -1,12 +1,14 @@
-
 <IfModule mod_rewrite.c>
+    Options -Multiviews
     RewriteEngine On
+    
+    # EN PRODUCCIÓN: La base es la raíz
     RewriteBase /
 
-   
-    RewriteCond %{REQUEST_FILENAME} !-f
+    # Si el archivo o carpeta no existe físicamente...
     RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
 
-    
-    RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]
+    # ...redirige todo al index.php (El cerebro de tu app)
+    RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
 </IfModule>
