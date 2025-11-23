@@ -42,7 +42,7 @@ if ($isLoggedIn) {
         <div class="flex items-center justify-between h-20">
             
             <div class="flex items-center">
-                <a href="<?php echo URL_PROJECT; ?>home" class="flex-shrink-0">
+                <a href="<?php echo URL_PROJECT; ?>/home" class="flex-shrink-0">
                     <img class="h-12 w-auto" src="<?php echo URL_PROJECT; ?>/public/img/logo_enyooi.png" alt="Logo Enyooi">
                 </a>
                 <div class="hidden md:block ml-10">
@@ -133,7 +133,7 @@ if ($isLoggedIn) {
                                 <a href="<?php echo URL_PROJECT; ?>/settings" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-cog w-4"></i> Configuración</a>
                             <?php endif; ?>
                         </div>
-                        <div class="py-1 border-t border-slate-700"><a href="<?php echo URL_PROJECT; ?>home/salir" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-sign-out-alt w-4"></i> Salir</a></div>
+                        <div class="py-1 border-t border-slate-700"><a href="<?php echo URL_PROJECT; ?>/home/salir" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-sign-out-alt w-4"></i> Salir</a></div>
                     </div>
                 </div>
             </div>
@@ -246,15 +246,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             searchTimeout = setTimeout(() => {
-                fetch(`<?php echo URL_PROJECT; ?>search/users?q=${encodeURIComponent(query)}`)
+                fetch(`<?php echo URL_PROJECT; ?>/search/users?q=${encodeURIComponent(query)}`)
                 .then(res => res.json())
                 .then(data => {
                     searchResults.innerHTML = '';
                     if (data.success && data.users.length > 0) {
                         data.users.forEach(user => {
                             const userHtml = `
-                                <a href="<?php echo URL_PROJECT; ?>perfil/${user.usuario}" class="flex items-center gap-3 p-2 hover:bg-slate-700/50 rounded-lg m-1 transition-colors">
-                                    <img src="<?php echo URL_PROJECT; ?>${user.foto_perfil || 'public/img/defaults/default_avatar.png'}" class="h-8 w-8 rounded-full object-cover">
+                                <a href="<?php echo URL_PROJECT; ?>/perfil/${user.usuario}" class="flex items-center gap-3 p-2 hover:bg-slate-700/50 rounded-lg m-1 transition-colors">
+                                    <img src="<?php echo URL_PROJECT; ?>${user.foto_perfil || '/public/img/defaults/default_avatar.png'}" class="h-8 w-8 rounded-full object-cover">
                                     <div>
                                         <p class="text-sm font-semibold text-gray-200">${user.nickname_artistico || user.usuario}</p>
                                         <p class="text-xs text-gray-400">@${user.usuario}</p>
