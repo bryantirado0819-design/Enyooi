@@ -8,6 +8,29 @@ if (session_status() === PHP_SESSION_NONE) {
 // Configuración principal y conexión a la base de datos
 require_once __DIR__ . '/config/config.php';
 
+// Cargar librerías base
+require_once 'config/config.php';
+
+// Autoload para clases Core (Helpers, Libs)
+spl_autoload_register(function($className){
+    // Intentamos cargar desde libs primero
+    $libPath = 'libs/' . $className . '.php';
+    if (file_exists(__DIR__ . '/' . $libPath)) {
+        require_once $libPath;
+        return;
+    }
+    
+    // Si no, intentar controllers (a veces pasa)
+    $ctrlPath = 'controller/' . $className . '.php';
+    if (file_exists(__DIR__ . '/' . $ctrlPath)) {
+        require_once $ctrlPath;
+        return;
+    }
+});
+
+
+require_once 'helpers/mailer_helper.php';
+
 // Helpers
 require_once __DIR__ . '/helpers/helper.php';
 

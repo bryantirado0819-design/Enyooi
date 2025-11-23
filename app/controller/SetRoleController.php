@@ -1,50 +1,63 @@
 <?php
+
 class SetRoleController extends Controller
 {
-    private $usuario;
+    private $userModel;
 
     public function __construct()
     {
-        $this->usuario = $this->model('Usuario');
+        $this->userModel = $this->model('UserModel');
     }
 
-    // Muestra la vista para seleccionar rol
     public function index()
     {
-        if (!isset($_SESSION['logueando'])) {
-            header('Location: ' . URL . 'login');
-            exit;
+        // Verificar si hay sesión
+        if (!isset($_SESSION['id_usuario'])) {
+            redirection('home/login');
+            return;
         }
 
-        $this->view('onboarding/set_role');
+        // Cargar vista
+        $this->view('pages/role_select');
     }
 
-    // Procesa y redirige según el rol
-    public function saveRole()
+    public function save()
     {
-        if (!isset($_SESSION['logueando'])) {
-            header('Location: ' . URL . 'login');
-            exit;
-        }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            
+            // Validar sesión
+            if (!isset($_SESSION['id_usuario'])) {
+                redirection('home/login');
+                return;
+            }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $uid  = $_SESSION['logueando'];
-            $role = $_POST['role'] ?? null;
+            $userId = $_SESSION['id_usuario'];
+            $role = isset($_POST['role']) ? trim($_POST['role']) : '';
 
-            if ($role && in_array($role, ['creadora', 'espectador'])) {
-                $this->usuario->setRole($uid, $role);
+            // Validar roles permitidos
+            $allowedRoles = ['creadora', 'espectador'];
+            if (!in_array($role, $allowedRoles)) {
+                // Error: rol no válido
+                redirection('setRoleController'); 
+                return;
+            }
 
+            // Actualizar en BD
+            if ($this->userModel->updateUserRole($userId, $role)) {
+                // Actualizar sesión
+                $_SESSION['rol'] = $role;
+
+                // Redirección SEGURA: Usar solo el nombre del controlador/metodo
                 if ($role === 'creadora') {
-                    header('Location: ' . URL . 'creadora_onboarding');
+                    // IMPORTANTE: No poner 'ENYOOI/' al principio
+                    redirection('CreatorDashboardController'); 
                 } else {
-                    header('Location: ' . URL . 'espectador_onboarding');
+                    redirection('home');
                 }
-                exit;
+            } else {
+                die('Error al guardar el rol');
             }
         }
-
-        // Si algo falla, vuelve al selector
-        header('Location: ' . URL . 'setrole');
-        exit;
     }
 }
+?>

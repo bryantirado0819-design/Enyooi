@@ -5,6 +5,7 @@
 // public/index.php
  ini_set('display_errors', 0);
     ini_set('log_errors', 1);
+    error_reporting(E_ALL);
 // Inicia la sesión aquí, una sola vez para toda la aplicacióna
 session_start();
 
