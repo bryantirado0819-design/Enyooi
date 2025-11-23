@@ -18,12 +18,14 @@ class Core
         // 1. LIMPIEZA FORENSE DE URL
         // Elimina segmentos basura como 'enyooi', 'public', 'index.php'
         // ---------------------------------------------------------
-        $basura = ['ENYOOI', 'public', 'index.php', 'app'];
+        $basura = ['enyooi', 'public', 'index.php', 'app']; 
         
         // Mientras el primer segmento sea basura (case-insensitive), lo quitamos
         while (isset($url[0]) && in_array(strtolower($url[0]), $basura)) {
             array_shift($url);
         }
+        
+       
         
         // Si la URL quedó vacía tras limpiar, es Home
         if (empty($url)) {
