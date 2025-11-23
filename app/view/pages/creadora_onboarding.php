@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const formData = new FormData(onboardingForm);
 
-            fetch('/ENYOOI/home/save_onboarding', {
+            fetch('/home/save_onboarding', {
                 method: 'POST',
                 body: formData
             })
