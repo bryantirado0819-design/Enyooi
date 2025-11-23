@@ -1,6 +1,7 @@
 <?php
 include_once __DIR__ . '/../custom/header.php';
-$base = defined('URL_PROJECT') ? URL_PROJECT : '/ENYOOI';
+
+$base = rtrim(URL_PROJECT, '/'); 
 ?>
 
 <!doctype html>

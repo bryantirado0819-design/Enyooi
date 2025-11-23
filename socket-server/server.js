@@ -24,7 +24,7 @@ const PUBLIC_IP = "127.0.0.1";
 const dbConfig = {
     host: 'localhost',
     user: 'enyooi_user',
-    password: 'EnyooiPass2025', 
+    password: 'Enyooi2025!', 
     database: 'enyooi'
 };
 
