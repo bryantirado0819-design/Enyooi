@@ -2,9 +2,16 @@
   Options -Multiviews
   RewriteEngine On
   
+  # EN PRODUCCIÓN CON DOMINIO (enyooi.com):
+  # La base debe ser la raíz '/' porque el navegador ya está "dentro" de public
+  # gracias al .htaccess anterior.
   RewriteBase /
   
+  # Reglas de seguridad:
+  # No procesar si el archivo existe físicamente (imágenes, css, js)
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-f
+  
+  # Todo lo demás se envía a index.php
   RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
 </IfModule>

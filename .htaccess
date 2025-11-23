@@ -1,10 +1,9 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    
-    # EN PRODUCCIÓN: La raíz es la barra sola /
+    # Forzar la raíz del servidor
     RewriteBase /
 
-    # Si la URL no empieza ya con public/, redirige a public/
+    # Si la petición NO es a la carpeta public, redirigir internamente a public/
     RewriteCond %{REQUEST_URI} !^/public/
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
