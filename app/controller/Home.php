@@ -23,7 +23,7 @@ class Home extends Controller
     public function index()
     {
         if (empty($_SESSION['logueando'])) {
-            header('Location: ' . RUTA_URL . '/home/entrar');
+            redirection('home/entrar'); 
             exit;
         }
     
@@ -32,7 +32,7 @@ class Home extends Controller
     
         if (!$datosUsuario) {
             session_destroy();
-            header('Location: ' . RUTA_URL . '/home/entrar');
+            redirection('home/entrar'); 
             exit;
         }
         
@@ -41,12 +41,12 @@ class Home extends Controller
         $onboarding = (int) ($datosUsuario->onboarding_creadora ?? 0);
     
         if ($rol === 'creadora' && $onboarding === 0) {
-            header('Location: ' . RUTA_URL . '/home/creadora_onboarding');
+            redirection('home/creadora_onboarding');
             exit;
         }
     
         if ($rol === '' || $rol === 'usuario') {
-            header('Location: ' . RUTA_URL . '/home/role_select');
+            redirection('home/role_select');
             exit;
         }
         
@@ -91,7 +91,7 @@ class Home extends Controller
     public function role_select()
     {
         if (empty($_SESSION['logueando'])) {
-            header('Location: /home/entrar');
+            redirection('home/entrar');
             exit;
         }
 
@@ -101,7 +101,7 @@ class Home extends Controller
 
             if (!in_array($role, ['creadora', 'espectador'], true)) {
                 $_SESSION['roleError'] = 'Rol inválido.';
-                header('Location: /home/role_select');
+                redirection('home/role_select');
                 exit;
             }
 
@@ -109,7 +109,7 @@ class Home extends Controller
 
             if (!$saved) {
                 $_SESSION['roleError'] = 'No se pudo guardar el rol. Intenta de nuevo.';
-                header('Location: /home/role_select');
+                redirection('home/role_select');
                 exit;
             }
 
@@ -118,11 +118,11 @@ class Home extends Controller
             error_log("✅ Rol guardado como {$role} para user {$uid}");
 
             if ($role === 'creadora') {
-                header('Location: /home/creadora_onboarding');
+                redirection('home/creadora_onboarding');
                 exit;
             }
 
-            header('Location: /home/espectador_onboarding');
+            redirection('home/espectador_onboarding');
             exit;
         }
 
@@ -132,7 +132,7 @@ class Home extends Controller
     public function creadora_onboarding()
     {
         if (empty($_SESSION['logueando'])) {
-            header('Location: /home/entrar');
+            redirection('home/entrar');
             exit;
         }
 
@@ -147,7 +147,7 @@ class Home extends Controller
     public function espectador_onboarding()
     {
         if (empty($_SESSION['logueando'])) {
-            header('Location: /home/entrar');
+            redirection('home/entrar');
             exit;
         }
 
@@ -238,7 +238,7 @@ class Home extends Controller
     public function save_espectador()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_SESSION['logueando'])) {
-            header('Location: /home/entrar');
+            redirection('home/entrar');
             exit;
         }
 
@@ -255,10 +255,10 @@ class Home extends Controller
         if ($this->usuarioModel->guardarOnboardingEspectador($uid, $nickname)) {
             $_SESSION['nickname']    = $nickname;
             $_SESSION['foto_perfil'] = 'public/img/defaults/default_avatar.png';
-            header('Location: /home');
+            redirection('home');
         } else {
             $_SESSION['roleError'] = 'Hubo un problema al guardar tu perfil. Inténtalo de nuevo.';
-            header('Location: /home/role_select');
+            redirection('home/role_select');
         }
         exit;
     }
@@ -282,7 +282,7 @@ class Home extends Controller
                     $_SESSION['rol']       = $datosUsuario->rol;
 
                     error_log("Login successful for user: " . $_SESSION['usuario']);
-                    header('Location: /home');
+                    redirection('home');
                     exit();
                 } else {
                     $_SESSION['errorLogin'] = 'El usuario o la contraseña son incorrectos';
@@ -304,7 +304,7 @@ class Home extends Controller
     {
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
             if (isset($_SESSION['logueando'])) {
-                header('Location: /home');
+                redirection('home');
                 exit();
             }
             $this->view('pages/register');
@@ -399,7 +399,7 @@ class Home extends Controller
 
         if ($this->usuarioModel->registrar($datosRegistro)) {
             $_SESSION['loginComplete'] = 'Tu registro se ha completado satisfactoriamente';
-            header('Location: /home/entrar'); exit();
+            redirection('home/entrar'); exit();
         } else {
             $_SESSION['usuarioError'] = "Error interno al registrar.";
             $this->view('pages/register'); return;
@@ -440,7 +440,7 @@ class Home extends Controller
             ];
 
             if ($this->usuarioModel->insertarPerfil($datos)) {
-                header('Location: /home');
+                redirection('home');
                 exit();
             } else {
                 echo "Error al insertar el perfil en la base de datos.";
@@ -454,7 +454,7 @@ class Home extends Controller
     {
         $_SESSION = [];
         session_destroy();
-        header('Location: /home/entrar');
+        redirection('home/entrar');
         exit();
     }
 }

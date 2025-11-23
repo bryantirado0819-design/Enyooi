@@ -29,7 +29,7 @@
       </div>
     <?php endif; ?>
 
-    <form method="POST" action="/home/role_select" style="margin-top:18px;">
+    <form method="POST" action="<?php echo URL_PROJECT; ?>home/role_select" style="margin-top:18px;">
       <div class="grid-cols-2" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
         <div class="choice creadora" role="button" aria-pressed="false">
           <div class="icon" style="background:linear-gradient(135deg,var(--accent),var(--accent-2));">🎤</div>

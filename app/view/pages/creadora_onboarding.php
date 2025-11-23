@@ -48,7 +48,7 @@
     <h1 class="text-2xl sm:text-3xl font-bold text-center mb-2">¡Bienvenida a ENYOOI!</h1>
     <p class="text-blue-200 text-sm text-center mb-6">Completa tu perfil para empezar a monetizar.</p>
     
-    <form id="onboarding-form" action="/ENYOOI/home/save_onboarding" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form id="onboarding-form" action="<?php echo URL_PROJECT; ?>home/save_onboarding" method="POST" enctype="multipart/form-data" class="space-y-6">
         
         <div>
             <label for="nickname" class="block text-sm font-medium mb-2">Nickname artístico</label>

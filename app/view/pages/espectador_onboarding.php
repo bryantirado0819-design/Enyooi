@@ -38,7 +38,7 @@
     <h1 class="text-2xl sm:text-3xl font-bold text-center mb-2">¡Bienvenido a ENYOOI!</h1>
     <p class="text-blue-200 text-sm text-center mb-8">Elige tu apodo público para empezar la diversión.</p>
     
-    <form action="/ENYOOI/home/save_espectador" method="POST" class="space-y-6">
+    <form action="<?php echo URL_PROJECT; ?>home/save_espectador" method="POST" class="space-y-6">
         <div>
             <label for="nickname" class="block text-sm font-medium mb-2">Tu Nickname</label>
             <input id="nickname" name="nickname" type="text"
