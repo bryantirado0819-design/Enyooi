@@ -7,14 +7,17 @@ define("DB_NAME", "enyooi");
 define("DB_USER", "enyooi_user"); 
 define("DB_PASSWORD", "Enyooi2025!"); 
 
-define('URL_PROJECT', 'https://enyooi.com');
-define('RUTA_URL', 'https://enyooi.com');
+
+
+define('URL_PROJECT', '[https://enyooi.com/](https://enyooi.com/)');
+define('RUTA_URL', '[https://enyooi.com/](https://enyooi.com/)');
 
 define('RUTA_APP', dirname(dirname(__FILE__)));
 define('NOMBRESITIO', 'Enyooi');
 
 // 3. URLs para Streaming (Sockets)
-define('NODE_SERVER_URL', 'https://live.enyooi.com'); 
+define('NODE_SERVER_URL', '[https://live.enyooi.com](https://live.enyooi.com)'); 
+
 define('URL_APP', dirname(dirname(__FILE__))); 
 define("PROJECT_NAME", "Enyooi");
 

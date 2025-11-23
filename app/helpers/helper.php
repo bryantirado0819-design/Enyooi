@@ -1,17 +1,24 @@
-
 <?php
 
-
+// Función para redirección interna robusta
 function redirection($url)
 {
-    $fullUrl = URL_PROJECT . $url;
+    // Limpiamos la URL entrante de barras al inicio para evitar dobles barras //
+    $cleanUrl = ltrim($url, '/');
+    
+    // URL_PROJECT ya tiene la barra al final (ver config.php), así que concatenamos seguro
+    $fullUrl = URL_PROJECT . $cleanUrl;
+    
+    // Evitamos caché en redirecciones
+    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache");
+    
     header("Location: " . $fullUrl);
     exit();
 }
 
-
-
-// Función para redirigir a una URL específica
+// Función para redirigir a una URL externa o absoluta específica
 function redirect($url)
 {
     header("Location: " . $url);
@@ -30,7 +37,7 @@ function sanitizeInput($data)
 // Función para verificar si el usuario está autenticado
 function isLoggedIn()
 {
-    return isset($_SESSION['user_id']);
+    return isset($_SESSION['logueando']); // Corregido para usar tu variable de sesión real
 }
 
 // Función para establecer un mensaje de sesión flash
@@ -55,7 +62,7 @@ function displayFlashMessage($name)
 {
     if (!empty($name) && !empty($_SESSION[$name])) {
         $class = !empty($_SESSION[$name . '_class']) ? $_SESSION[$name . '_class'] : 'success';
-        echo '<div class="' . $class . '">' . $_SESSION[$name] . '</div>';
+        echo '<div class="alert alert-' . $class . '">' . $_SESSION[$name] . '</div>';
         unset($_SESSION[$name]);
         unset($_SESSION[$name . '_class']);
     }
