@@ -43,16 +43,16 @@ if ($isLoggedIn) {
             
             <div class="flex items-center">
                 <a href="<?php echo URL_PROJECT; ?>home" class="flex-shrink-0">
-                    <img class="h-12 w-auto" src="<?php echo URL_PROJECT; ?>public/img/logo_enyooi.png" alt="Logo Enyooi">
+                    <img class="h-12 w-auto" src="<?php echo URL_PROJECT; ?>/public/img/logo_enyooi.png" alt="Logo Enyooi">
                 </a>
                 <div class="hidden md:block ml-10">
                     <div class="flex items-baseline space-x-4">
-                        <a href="<?php echo URL_PROJECT; ?>home" class="flex items-center gap-2 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"><i class="fas fa-home w-4"></i><span>Inicio</span></a>
-                        <a href="<?php echo URL_PROJECT; ?>usuarios" class="flex items-center gap-2 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"><i class="fas fa-users w-4"></i><span>Explorar</span></a>
-                        <a href="<?php echo URL_PROJECT; ?>live" class="flex items-center gap-2 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"><i class="fas fa-video w-4 text-red-500"></i><span>Live</span></a>
+                        <a href="<?php echo URL_PROJECT; ?>/home" class="flex items-center gap-2 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"><i class="fas fa-home w-4"></i><span>Inicio</span></a>
+                        <a href="<?php echo URL_PROJECT; ?>/usuarios" class="flex items-center gap-2 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"><i class="fas fa-users w-4"></i><span>Explorar</span></a>
+                        <a href="<?php echo URL_PROJECT; ?>/live" class="flex items-center gap-2 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"><i class="fas fa-video w-4 text-red-500"></i><span>Live</span></a>
                         
                         <?php if ($isLoggedIn && $user_rol === 'creadora'): ?>
-                            <a href="<?php echo URL_PROJECT; ?>live/stream" class="flex items-center gap-2 text-white bg-pink-600/80 hover:bg-pink-700/80 px-4 py-2 rounded-full text-sm font-bold transition-colors shadow-lg">
+                            <a href="<?php echo URL_PROJECT; ?>/live/stream" class="flex items-center gap-2 text-white bg-pink-600/80 hover:bg-pink-700/80 px-4 py-2 rounded-full text-sm font-bold transition-colors shadow-lg">
                                 <i class="fas fa-broadcast-tower"></i>
                                 <span>Hacer Live</span>
                             </a>
@@ -80,7 +80,7 @@ if ($isLoggedIn) {
                 </div>
 
                 <!-- Mensajes -->
-                <a href="<?php echo URL_PROJECT; ?>mensajes" title="Mensajes" class="relative text-gray-300 hover:text-white text-xl transition-colors">
+                <a href="<?php echo URL_PROJECT; ?>/mensajes" title="Mensajes" class="relative text-gray-300 hover:text-white text-xl transition-colors">
                     <i class="far fa-envelope"></i>
                     <?php if ($message_count > 0): ?>
                     <span class="absolute -top-1 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white"><?php echo $message_count; ?></span>
@@ -101,7 +101,7 @@ if ($isLoggedIn) {
                         <div id="notification-list-container" class="custom-scrollbar max-h-96 overflow-y-auto">
                             <!-- JS inserta las notificaciones aquí -->
                         </div>
-                        <a href="<?php echo URL_PROJECT; ?>notificacion/verTodas" class="block text-center p-2 text-sm text-blue-400 hover:bg-slate-700/50 rounded-b-xl transition-colors">Ver todas</a>
+                        <a href="<?php echo URL_PROJECT; ?>/notificacion/verTodas" class="block text-center p-2 text-sm text-blue-400 hover:bg-slate-700/50 rounded-b-xl transition-colors">Ver todas</a>
                     </div>
                 </div>
 
@@ -123,14 +123,14 @@ if ($isLoggedIn) {
                         </div>
                         <div class="py-1">
                             <?php if ($user_rol === 'creadora'): ?>
-                                <a href="<?php echo URL_PROJECT; ?>perfil/<?php echo $user->usuario; ?>" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="far fa-user w-4"></i> Mi Perfil</a>
-                                <a href="<?php echo URL_PROJECT; ?>CreatorDashboardController" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-chart-line w-4"></i> Dashboard</a>
-                                <a href="<?php echo URL_PROJECT; ?>retiro" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50">💰 Cartera</a>
-                                <a href="<?php echo URL_PROJECT; ?>Historial" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-history w-4"></i> Historial</a>
-                                <a href="<?php echo URL_PROJECT; ?>settings" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-cog w-4"></i> Configuración</a>
+                                <a href="<?php echo URL_PROJECT; ?>/perfil/<?php echo $user->usuario; ?>" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="far fa-user w-4"></i> Mi Perfil</a>
+                                <a href="<?php echo URL_PROJECT; ?>/CreatorDashboardController" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-chart-line w-4"></i> Dashboard</a>
+                                <a href="<?php echo URL_PROJECT; ?>/retiro" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50">💰 Cartera</a>
+                                <a href="<?php echo URL_PROJECT; ?>/Historial" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-history w-4"></i> Historial</a>
+                                <a href="<?php echo URL_PROJECT; ?>/settings" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-cog w-4"></i> Configuración</a>
                             <?php else: ?>
-                                <a href="<?php echo URL_PROJECT; ?>perfil/<?php echo $user->usuario; ?>" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="far fa-user w-4"></i> Mi Perfil</a>
-                                <a href="<?php echo URL_PROJECT; ?>settings" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-cog w-4"></i> Configuración</a>
+                                <a href="<?php echo URL_PROJECT; ?>/perfil/<?php echo $user->usuario; ?>" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="far fa-user w-4"></i> Mi Perfil</a>
+                                <a href="<?php echo URL_PROJECT; ?>/settings" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-cog w-4"></i> Configuración</a>
                             <?php endif; ?>
                         </div>
                         <div class="py-1 border-t border-slate-700"><a href="<?php echo URL_PROJECT; ?>home/salir" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-sign-out-alt w-4"></i> Salir</a></div>
@@ -144,12 +144,12 @@ if ($isLoggedIn) {
     <!-- PANEL DEL MENÚ MÓVIL -->
     <div id="mobile-menu" class="hidden md:hidden">
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-slate-700/50">
-            <a href="<?php echo URL_PROJECT; ?>home" class="flex items-center gap-3 block text-gray-300 hover:bg-slate-700/50 px-3 py-2 rounded-md text-base font-medium"><i class="fas fa-home w-5"></i>Inicio</a>
-            <a href="<?php echo URL_PROJECT; ?>usuarios" class="flex items-center gap-3 block text-gray-300 hover:bg-slate-700/50 px-3 py-2 rounded-md text-base font-medium"><i class="fas fa-users w-5"></i>Explorar</a>
-            <a href="<?php echo URL_PROJECT; ?>live" class="flex items-center gap-3 block text-gray-300 hover:bg-slate-700/50 px-3 py-2 rounded-md text-base font-medium"><i class="fas fa-video w-5 text-red-500"></i>Live</a>
+            <a href="<?php echo URL_PROJECT; ?>/home" class="flex items-center gap-3 block text-gray-300 hover:bg-slate-700/50 px-3 py-2 rounded-md text-base font-medium"><i class="fas fa-home w-5"></i>Inicio</a>
+            <a href="<?php echo URL_PROJECT; ?>/usuarios" class="flex items-center gap-3 block text-gray-300 hover:bg-slate-700/50 px-3 py-2 rounded-md text-base font-medium"><i class="fas fa-users w-5"></i>Explorar</a>
+            <a href="<?php echo URL_PROJECT; ?>/live" class="flex items-center gap-3 block text-gray-300 hover:bg-slate-700/50 px-3 py-2 rounded-md text-base font-medium"><i class="fas fa-video w-5 text-red-500"></i>Live</a>
             
             <?php if ($isLoggedIn && $user_rol === 'creadora'): ?>
-                <a href="<?php echo URL_PROJECT; ?>live/stream" class="flex items-center gap-3 block text-white bg-pink-600/80 px-3 py-2 rounded-md text-base font-medium"><i class="fas fa-broadcast-tower w-5"></i>Hacer Live</a>
+                <a href="<?php echo URL_PROJECT; ?>/live/stream" class="flex items-center gap-3 block text-white bg-pink-600/80 px-3 py-2 rounded-md text-base font-medium"><i class="fas fa-broadcast-tower w-5"></i>Hacer Live</a>
             <?php endif; ?>
         </div>
         <?php if ($isLoggedIn): ?>
@@ -163,21 +163,21 @@ if ($isLoggedIn) {
             </div>
             <div class="mt-3 px-2 space-y-1">
                  <!-- Links del menú móvil (sin cambios) -->
-                <a href="<?php echo URL_PROJECT; ?>mensajes" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="far fa-envelope w-5"></i>Mensajes</a>
-                <a href="<?php echo URL_PROJECT; ?>notificacion/verTodas" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="far fa-bell w-5"></i>Notificaciones</a>
+                <a href="<?php echo URL_PROJECT; ?>/mensajes" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="far fa-envelope w-5"></i>Mensajes</a>
+                <a href="<?php echo URL_PROJECT; ?>/notificacion/verTodas" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="far fa-bell w-5"></i>Notificaciones</a>
                 <div class="border-t border-slate-700 my-2"></div>
                 
                 <?php if ($user_rol === 'creadora'): ?>
-                     <a href="<?php echo URL_PROJECT; ?>perfil/<?php echo $user->usuario; ?>" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="far fa-user w-5"></i>Mi Perfil</a>
-                    <a href="<?php echo URL_PROJECT; ?>CreatorDashboardController" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="fas fa-chart-line w-5"></i>Dashboard</a>
-                    <a href="<?php echo URL_PROJECT; ?>wallet" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50">💰 Cartera</a>
-                    <a href="<?php echo URL_PROJECT; ?>Historial" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-history w-4"></i> Historial</a>
+                     <a href="<?php echo URL_PROJECT; ?>/perfil/<?php echo $user->usuario; ?>" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="far fa-user w-5"></i>Mi Perfil</a>
+                    <a href="<?php echo URL_PROJECT; ?>/CreatorDashboardController" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="fas fa-chart-line w-5"></i>Dashboard</a>
+                    <a href="<?php echo URL_PROJECT; ?>/wallet" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50">💰 Cartera</a>
+                    <a href="<?php echo URL_PROJECT; ?>/Historial" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/50"><i class="fas fa-history w-4"></i> Historial</a>
                 <?php else: // Espectador ?>
-                    <a href="<?php echo URL_PROJECT; ?>perfil/<?php echo $user->usuario; ?>" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="far fa-user w-5"></i>Mi Perfil</a>
+                    <a href="<?php echo URL_PROJECT; ?>/perfil/<?php echo $user->usuario; ?>" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="far fa-user w-5"></i>Mi Perfil</a>
                 <?php endif; ?>
 
-                <a href="<?php echo URL_PROJECT; ?>settings" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="fas fa-cog w-5"></i>Configuración</a>
-                <a href="<?php echo URL_PROJECT; ?>home/salir" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="fas fa-sign-out-alt w-5"></i>Salir</a>
+                <a href="<?php echo URL_PROJECT; ?>/settings" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="fas fa-cog w-5"></i>Configuración</a>
+                <a href="<?php echo URL_PROJECT; ?>/home/salir" class="flex items-center gap-3 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-slate-700/50"><i class="fas fa-sign-out-alt w-5"></i>Salir</a>
             </div>
         </div>
         <?php endif; ?>
