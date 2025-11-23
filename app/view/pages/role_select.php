@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Elige tu rol - ENYOOI</title>
-  <link rel="stylesheet" href="/ENYOOI/public/assets/css/styles.css">
+  <link rel="stylesheet" href="/public/assets/css/styles.css">
   <style>
     :root { --accent:#ff4fa3; --accent-2:#7c5cff; }
     body { background:#0f172a; color:#e6eef8; font-family:'Poppins',sans-serif; display:flex; justify-content:center; align-items:center; min-height:100vh; }
@@ -29,7 +29,7 @@
       </div>
     <?php endif; ?>
 
-    <form method="POST" action="/ENYOOI/home/role_select" style="margin-top:18px;">
+    <form method="POST" action="/home/role_select" style="margin-top:18px;">
       <div class="grid-cols-2" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
         <div class="choice creadora" role="button" aria-pressed="false">
           <div class="icon" style="background:linear-gradient(135deg,var(--accent),var(--accent-2));">🎤</div>
