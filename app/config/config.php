@@ -6,7 +6,7 @@ define("DB_HOST", "localhost");
 define("DB_NAME", "enyooi"); 
 define("DB_USER", "enyooi_user"); 
 define("DB_PASSWORD", "Enyooi2025!"); 
-define('URL_PROJECT', 'http://enyooi.com/');
+define('URL_PROJECT', 'http://enyooi.com');
 
 define('URL_APP', dirname(dirname(__FILE__))); 
 define("PROJECT_NAME", "Enyooi");
@@ -22,7 +22,7 @@ define('NODE_SERVER_URL', 'http://localhost:3000');
 // Lovense Developer Token (Clave secreta, no exponer en el frontend)
 define('LOVENSE_DEVELOPER_TOKEN', 'N9BuBePZ1MzWH9aCrIkSgVafg9RT8VL_N2ME09MMKCmvI9AuoPr5FBxwW03JSB2B');
 // ✅ CORRECCIÓN CRÍTICA: Se define RUTA_URL primero y de forma limpia.
-define('RUTA_URL', 'http://enyooi.com'); // Sin la barra al final
+define('RUTA_URL', 'http://enyooi.com/'); // Sin la barra al final
 
 // Esta constante ya no es necesaria y causaba duplicados. La eliminamos.
 // define('URL_PROJECT', 'http://localhost/ENYOOI/'); 
