@@ -3,23 +3,22 @@
 // 🚀 SERVIDOR MAESTRO ENYOOI: STREAMING + SOCKETS + MYSQL
 // ================================================================
 
+
 const express = require('express');
 const http = require('http');
 const { Server } = require("socket.io");
 const mediasoup = require('mediasoup');
 const cors = require('cors');
 const mysql = require('mysql2/promise');
-const fetch = require('node-fetch'); // Opcional si usas fetch interno
 
-// ================================================================
-// ⚙️ CONFIGURACIÓN DEL SISTEMA (¡EDITAR ESTO!)
-// ================================================================
-
-const PUBLIC_IP = "127.0.0.1"; 
+// Detección automática de IP Pública (útil para AWS/DigitalOcean/VPS)
+// Si falla, usa 0.0.0.0 (escuchar en todas)
+const LISTEN_IP = '0.0.0.0';
+const ANNOUNCED_IP = '72.61.75.91';
 
 // 2. DATOS DE BASE DE DATOS (MySQL)
 const dbConfig = {
-    host: 'localhost',
+    host: '100.127.0.29',
     user: 'enyooi_user',
     password: 'Enyooi2025!', 
     database: 'enyooi'
@@ -69,10 +68,9 @@ const mediasoupConfig = {
         ]
     },
     webRtcTransport: {
-        listenIps: [{ 
-            ip: '0.0.0.0', 
-            announcedIp: PUBLIC_IP === "0.0.0.0" ? null : PUBLIC_IP 
-        }],
+        listenIps: [
+            { ip: LISTEN_IP, announcedIp: ANNOUNCED_IP } 
+        ],
         enableUdp: true,
         enableTcp: true,
         preferUdp: true
@@ -253,8 +251,20 @@ io.on('connection', (socket) => {
             if (!rooms[streamId]) rooms[streamId] = { viewers: new Set(), producers: [] };
             rooms[streamId].producers.push(producer);
 
-            // Anunciar a los espectadores que hay nuevo video/audio
+            // Anunciar a los espectadores
             socket.to(streamId).emit('new-producer', { producerId: producer.id });
+
+            // ✅ CÓDIGO NUEVO: ACTUALIZAR BD A 'LIVE'
+            // Solo lo hacemos cuando se publica el VIDEO (no el audio)
+            if (kind === 'video') {
+                console.log(`🎥 Creador ${streamId} inició video. Poniendo LIVE en BD...`);
+                try {
+                    await global.db.execute(
+                        "UPDATE streams SET estado = 'live', started_at = NOW() WHERE creator_id = ?", 
+                        [streamId]
+                    );
+                } catch (e) { console.error("Error BD al poner LIVE:", e); }
+            }
 
             callback({ id: producer.id });
         }
@@ -366,11 +376,20 @@ io.on('connection', (socket) => {
     // 🚪 5. DESCONEXIÓN Y LIMPIEZA
     // ------------------------------------------------------------
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', async () => {
         // 1. Limpiar usuario online
         if (userId) {
             onlineUsers.delete(userId.toString());
             io.emit('user-status', { userId, online: false });
+
+            // ✅ CÓDIGO NUEVO: ACTUALIZAR BD A 'OFFLINE'
+            try {
+                console.log(`🔴 Usuario ${userId} se desconectó. Cerrando stream...`);
+                await global.db.execute(
+                    "UPDATE streams SET estado = 'offline', ended_at = NOW() WHERE creator_id = ? AND estado = 'live'", 
+                    [userId]
+                );
+            } catch (e) { console.error("Error BD al poner OFFLINE:", e); }
         }
 
         // 2. Limpiar de las salas de stream
@@ -378,11 +397,7 @@ io.on('connection', (socket) => {
             if (rooms.hasOwnProperty(streamId) && rooms[streamId].viewers) {
                 if (rooms[streamId].viewers.has(socket.id)) {
                     rooms[streamId].viewers.delete(socket.id);
-                    
-                    // Avisar a la sala
                     io.to(streamId).emit('update_viewer_count', { count: rooms[streamId].viewers.size });
-                    
-                    // Avisar al mundo (Home)
                     broadcastAllViewerCounts();
                 }
             }

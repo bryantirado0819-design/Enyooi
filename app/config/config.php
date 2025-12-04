@@ -6,7 +6,7 @@ define("DB_HOST", "localhost");
 define("DB_NAME", "enyooi"); 
 define("DB_USER", "enyooi_user"); 
 define("DB_PASSWORD", "Enyooi2025!"); 
-define('URL_PROJECT', 'http://enyooi.com');
+define('URL_PROJECT', 'http://enyooi.com/');
 
 define('URL_APP', dirname(dirname(__FILE__))); 
 define("PROJECT_NAME", "Enyooi");

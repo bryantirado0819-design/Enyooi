@@ -1,10 +1,14 @@
 <?php
 require_once dirname(__DIR__) . '/vendor/autoload.php';
-
 // app/initializer.php
 if (session_status() === PHP_SESSION_NONE) {
+    // Configuración segura de sesión antes de iniciar
+    ini_set('session.cookie_httponly', 1);
+    ini_set('session.use_strict_mode', 1);
+    ini_set('session.cookie_samesite', 'Lax');
     session_start();
 }
+
 // Configuración principal y conexión a la base de datos
 require_once __DIR__ . '/config/config.php';
 
@@ -62,6 +66,8 @@ spl_autoload_register(function($className) {
             return;
         }
     }
+    require_once __DIR__ . '/libs/Security.php';
+Security::init(); 
 
     // En lugar de 'die()', devolvemos un JSON de error.
     header('Content-Type: application/json; charset=utf-8');

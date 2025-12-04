@@ -1,0 +1,6 @@
+mysql-connector-python
+watchdog
+python-magic
+requests
+numpy
+scikit-learn
