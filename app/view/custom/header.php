@@ -31,6 +31,10 @@
 
     <title><?php echo PROJECT_NAME ?></title>
      <script>
+        
+        const isLoggedIn = <?php echo isset($_SESSION['logueando']) ? 'true' : 'false'; ?>;
+
+        
         window.enyooiConfig = {
             userId: <?php echo isset($_SESSION['logueando']) ? json_encode($_SESSION['logueando']) : 'null'; ?>,
             urlBase: '<?php echo RUTA_URL; ?>'
