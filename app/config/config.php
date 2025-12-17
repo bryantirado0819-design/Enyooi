@@ -17,7 +17,7 @@ define('RUTA_URL', 'https://enyooi.com');
 
 // Configuración de Sockets
 define('NODE_SERVER_URL', 'https://enyooi.com'); 
-define('SOCKET_URL', 'https://socket.enyooi.com');
+define('SOCKET_URL', 'https://enyooi.com');
 define('NODE_INTERNAL_URL', 'http://72.61.75.91:3000');
 
 // 3. RUTAS DE CARPETAS (Directorios del sistema)
