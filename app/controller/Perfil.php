@@ -10,8 +10,8 @@ class Perfil extends Controller
     public function __construct()
     {
         // ✅ SOLUCIÓN: Cargando los modelos con los nombres exactos de tus archivos.
-        $this->usuarioModel = $this->model('usuario');
-        $this->publicarModel = $this->model('publicar'); 
+        $this->usuarioModel = $this->model('Usuario');
+        $this->publicarModel = $this->model('Publicar'); 
         $this->suscripcionModel = $this->model('SuscripcionModel');
         $this->contenidoModel = $this->model('ContenidoModel');
     }
@@ -63,7 +63,7 @@ class Perfil extends Controller
             'publicacionesDesbloqueadas' => $publicacionesDesbloqueadas,
             'editProfileLink' => RUTA_URL . '/settings',
             'misLikes' => $misLikesIds,
-            'user_avatar' => $perfilLogueado->foto_perfil ?? 'public/img/defaults/default_avatar.png'
+            'user_avatar' => $perfilLogueado->foto_perfil ?? '/img/defaults/default_avatar.png'
         ];
 
         $this->view('pages/perfil', $datos);
