@@ -10,7 +10,7 @@ class Usuarios extends Controller
     public function __construct()
     {
         // Cargamos el modelo de usuario que ya tenemos
-        $this->usuarioModel = $this->model('Usuario');
+        $this->usuarioModel = $this->model('usuario');
     }
 
     // Este es el método que se ejecuta por defecto al ir a /usuarios
