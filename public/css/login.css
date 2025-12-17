@@ -1,0 +1,112 @@
+/* Encapsulamiento bajo .login-page */
+.login-page .container-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #1E1E1E;
+}
+
+.login-page .container-content {
+    display: flex;
+    flex-direction: row;
+    background-color: #2B2B2B;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    max-width: 800px;
+    width: 100%;
+    margin: 20px;
+}
+
+.login-page .content-action {
+    flex: 1;
+    padding-right: 30px;
+}
+
+.login-page .content-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    background: linear-gradient(135deg, #007BFF 30%, #311476 100%);
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.login-page .content-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+.login-page h4 {
+    color: #E0E0E0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.login-page input[type="text"], .login-page input[type="password"] {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 1px solid #444;
+    background-color: #1E1E1E;
+    color: #E0E0E0;
+    font-size: 16px;
+}
+
+.login-page input[type="text"]::placeholder, .login-page input[type="password"]::placeholder {
+    color: #A9A9A9;
+}
+
+.login-page input[type="text"]:focus, .login-page input[type="password"]:focus {
+    border-color: #3a32a8;
+    outline: none;
+    box-shadow: 0 0 10px rgba(8, 165, 212, 0.623);
+}
+
+.login-page .btn-purple {
+    background-color: #203a76;
+    color: #fff;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.login-page .btn-purple:hover {
+    background-color: #1e24ca;
+}
+
+.login-page .contenido-link {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.login-page .contenido-link a {
+    color: #007BFF;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.login-page .contenido-link a:hover {
+    color: #5673d1;
+}
+
+/* Responsividad para dispositivos móviles */
+@media (max-width: 768px) {
+    .login-page .container-content {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .login-page .content-action {
+        padding-right: 0;
+        margin-bottom: 20px;
+    }
+}

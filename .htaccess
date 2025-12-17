@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Forzar la raíz del servidor
+    RewriteBase /
+
+    # Si la petición NO es a la carpeta public, redirigir internamente a public/
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

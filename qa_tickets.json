@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "area": "Recarga Zafiros",
+    "task": "Crear recarga y pagar en sandbox",
+    "acceptance": "Saldo incrementa correctamente y transacción queda en estado aprobado tras callback"
+  },
+  {
+    "id": 2,
+    "area": "Recarga Zafiros",
+    "task": "Callback prod HMAC validation",
+    "acceptance": "Callback con firma inválida es rechazado"
+  },
+  {
+    "id": 3,
+    "area": "Compra Contenido",
+    "task": "Comprar contenido con saldo suficiente",
+    "acceptance": "Saldo disminuye, creadora saldo aumenta, compra registrada, URL firmada generada"
+  },
+  {
+    "id": 4,
+    "area": "Compra Contenido",
+    "task": "Intentar compra sin saldo suficiente",
+    "acceptance": "Se muestra error 402 y no se registra compra"
+  },
+  {
+    "id": 5,
+    "area": "Propinas",
+    "task": "Enviar propina rápida",
+    "acceptance": "Saldo remitente baja, creadora aumenta, registro en propinas"
+  },
+  {
+    "id": 6,
+    "area": "Admin",
+    "task": "Reembolso de compra",
+    "acceptance": "Compra cambia a reembolsado, saldo comprador restaurado, creadora deducida correctamente"
+  },
+  {
+    "id": 7,
+    "area": "Serve Content",
+    "task": "Verificar URL firmada expira",
+    "acceptance": "URL expirada retorna 403"
+  },
+  {
+    "id": 8,
+    "area": "Security",
+    "task": "CSRF token present and validated",
+    "acceptance": "Forms without CSRF rejected"
+  },
+  {
+    "id": 9,
+    "area": "Integration",
+    "task": "Navbar shows updated zafiros after operations",
+    "acceptance": "Navbar badge updates after wallet changes"
+  }
+]

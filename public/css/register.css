@@ -1,0 +1,127 @@
+/* Encapsulamiento bajo .register-page */
+.register-page .container-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #1E1E1E;
+}
+
+.register-page .container-content {
+  display: flex;
+  flex-direction: row;
+  background-color: #2B2B2B;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  max-width: 800px;
+  width: 100%;
+  margin: 20px;
+}
+
+.register-page .content-action {
+  flex: 1;
+  padding-right: 30px;
+}
+
+.register-page .content-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  background: linear-gradient(135deg, #007BFF 30%, #310c67 100%);
+  border-radius: 15px;
+  padding: 20px;
+}
+
+.register-page .content-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+.register-page h4 {
+  color: #E0E0E0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.register-page input[type="email"],
+.register-page input[type="text"],
+.register-page input[type="password"] {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 1px solid #444;
+  background-color: #1E1E1E;
+  color: #E0E0E0;
+  font-size: 16px;
+}
+
+.register-page input[type="email"]::placeholder,
+.register-page input[type="text"]::placeholder,
+.register-page input[type="password"]::placeholder,
+.refister-page input[type="Date"]::placeholder {
+  color: #A9A9A9;
+}
+
+.register-page input[type="email"]:focus,
+.register-page input[type="text"]:focus,
+.register-page input[type="password"]:focus,
+.refister-page input[type="Date"]:focus{
+  border-color: #1f198a;
+  outline: none;
+  box-shadow: 0 0 10px rgba(0, 183, 239, 0.5);
+}
+
+.register-page .btn-purple {
+  background-color: #2b3498;
+  color: #fff;
+  border: none;
+  padding: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.register-page .btn-purple:hover {
+  background-color: #1b1172;
+}
+
+.register-page .contenido-link {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.register-page .contenido-link a {
+  color: #007BFF;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.register-page .contenido-link a:hover {
+  color: #1c299e;
+}
+
+/* Alertas */
+.register-page .alert {
+  margin-top: 15px;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+/* Responsividad para dispositivos móviles */
+@media (max-width: 768px) {
+  .register-page .container-content {
+      flex-direction: column;
+      padding: 20px;
+  }
+
+  .register-page .content-action {
+      padding-right: 0;
+      margin-bottom: 20px;
+  }
+}
