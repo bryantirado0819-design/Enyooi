@@ -25,7 +25,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/ScrollTrigger.min.js"></script>
     <!--Icon-->
-    <link rel="icon" type="image/png" href="<?php echo URL_PROJECT; ?>/public/img/ico_enyooi.png"/>
+    <link rel="icon" type="image/png" href="<?php echo URL_PROJECT; ?>public/img/ico_enyooi.png"/>
 
     <title><?php echo PROJECT_NAME ?></title>
      <script>

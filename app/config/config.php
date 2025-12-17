@@ -12,8 +12,8 @@ define("DB_PASSWORD", "Enyooi2025!");
 
 // 2. URLs DEL PROYECTO (Estáticas para evitar errores)
 // Usamos tu dominio real y puertos fijos
-define('URL_PROJECT', 'https://enyooi.com/'); // Con slash al final
-define('RUTA_URL', 'https://enyooi.com');     // Sin slash al final
+define('URL_PROJECT', 'https://enyooi.com'); // Con slash al final
+define('RUTA_URL', 'https://enyooi.com/');     // Sin slash al final
 
 // Configuración de Sockets y Node (Puerto 3000 es el estándar que usas en server.js)
 // Si usas Proxy Nginx (Recomendado):
