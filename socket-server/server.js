@@ -13,7 +13,7 @@ const mysql = require('mysql2/promise');
 // 1. CONFIGURACIÓN
 const PORT = 3000;
 const dbConfig = {
-    host: '100.127.0.29',
+    host: 'localhost',
     user: 'enyooi_user',
     password: 'Enyooi2025!', 
     database: 'enyooi',
